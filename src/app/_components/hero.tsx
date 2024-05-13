@@ -1,8 +1,9 @@
-import React from "react";
+import Image from "next/image";
+import lightning from "@/lib/lightning.png";
 
 export default function Hero() {
   return (
-    <div className="my-10">
+    <div className="my-10 flex">
       <div className="flex w-2/3 flex-col gap-5">
         <div className="badge badge-secondary p-3 text-xs font-bold uppercase tracking-wide text-white">
           The language learning copilot
@@ -54,6 +55,13 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      <Image
+        src={lightning}
+        width={lightning.width + 40}
+        height={lightning.height}
+        alt={"Lightning_image"}
+      />
     </div>
   );
 }
