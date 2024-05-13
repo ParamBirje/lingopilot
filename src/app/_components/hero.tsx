@@ -1,5 +1,6 @@
 import Image from "next/image";
 import lightning from "@/lib/lightning.png";
+import { Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -19,12 +20,13 @@ export default function Hero() {
         </p>
 
         <div className="flex items-center gap-8">
-          <button className="btn btn-primary text-white">
+          <button className="btn btn-primary flex items-center gap-2 text-white">
+            <Sparkles size={15} />
             <p>Get Started</p>
           </button>
 
           <button className="btn btn-primary btn-outline">
-            <p>See LingoPilot in action</p>
+            <p>See LingoPilot in action →</p>
           </button>
 
           <div className="flex items-center gap-1">
