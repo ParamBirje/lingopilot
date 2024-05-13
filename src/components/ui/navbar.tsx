@@ -10,7 +10,7 @@ const indie = Indie_Flower({
 
 export default function Navbar() {
   return (
-    <nav className="navbar bg-base-100 py-4">
+    <nav className="navbar bg-base-100">
       <div className="flex-1">
         <Link href="/" className={`relative top-1 text-4xl ${indie.className}`}>
           LingoPilot
