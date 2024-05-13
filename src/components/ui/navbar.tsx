@@ -1,11 +1,20 @@
 import Link from "next/link";
 import React from "react";
 
-export default function navbar() {
+import { Indie_Flower } from "next/font/google";
+
+const indie = Indie_Flower({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+export default function Navbar() {
   return (
-    <nav className="navbar bg-base-100">
+    <nav className="navbar bg-base-100 py-4">
       <div className="flex-1">
-        <a className="btn btn-ghost text-2xl">LingoPilot</a>
+        <Link href="/" className={`relative top-1 text-4xl ${indie.className}`}>
+          LingoPilot
+        </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal items-center gap-3 px-1 !font-medium">
