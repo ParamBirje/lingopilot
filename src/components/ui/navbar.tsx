@@ -5,10 +5,10 @@ export default function navbar() {
   return (
     <nav className="navbar bg-base-100">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">LingoPilot</a>
+        <a className="btn btn-ghost text-2xl">LingoPilot</a>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal items-center gap-3 px-1">
+        <ul className="menu menu-horizontal items-center gap-3 px-1 !font-medium">
           <li>
             <Link href="#">Features</Link>
           </li>
@@ -19,7 +19,7 @@ export default function navbar() {
             <Link href="#">About</Link>
           </li>
 
-          <Link href="/login" className="btn btn-primary text-white">
+          <Link href="/login" className="btn btn-primary btn-sm text-white">
             Sign Up
           </Link>
         </ul>
