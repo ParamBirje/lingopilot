@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { Raleway } from "next/font/google";
 
-const inter = Inter({
+const raleway = Raleway({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="dark" lang="en">
-      <body className={`font-sans ${inter.variable}`}>{children}</body>
+      <body className={`font-sans ${raleway.variable}`}>{children}</body>
     </html>
   );
 }
