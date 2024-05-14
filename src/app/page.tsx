@@ -9,7 +9,23 @@ export default function HomePage() {
       <Hero />
 
       {/* Video/Screenshot placeholder */}
-      <div className="bg-base-200 h-[60vh] w-full rounded-md" />
+      <div className="h-[60vh] w-full rounded-md bg-base-200" />
+
+      <div className="flex flex-col gap-5 rounded-md bg-base-200 py-32 text-center">
+        <h2 className="scroll-m-20 text-4xl font-extrabold tracking-tight">
+          This is the consequence of not having a conversation partner.
+        </h2>
+
+        <p className="mx-auto w-2/4 text-lg tracking-wide">
+          A fully interactive voice-enabled A.I language speaking assistant that
+          refines & tones your language skills. Lorem ipsum dolor sit amet.
+        </p>
+
+        <div className="mt-10 flex items-center justify-center gap-10">
+          <div>step1</div>
+          <div>step2</div>
+        </div>
+      </div>
     </main>
   );
 }
