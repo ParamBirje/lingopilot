@@ -13,22 +13,22 @@ export default function Problem() {
         refines & tones your language skills. Lorem ipsum dolor sit amet.
       </p>
 
-      <div className="mt-10 flex items-center justify-center gap-10">
-        <div className="flex flex-col items-center gap-5">
+      <div className="mx-auto mt-10 flex w-2/3 items-center justify-center gap-10 text-sm">
+        <div className="flex w-full flex-col items-center gap-5">
           <p className="text-4xl">🙇</p>
           <p className="font-semibold">Step1 of something you do.</p>
         </div>
 
-        <Redo className="opacity-50" size={50} />
+        <Redo className="w-full opacity-50" size={50} />
 
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex w-full flex-col items-center gap-5">
           <p className="text-4xl">🥱</p>
           <p className="font-semibold">step2 of something you do.</p>
         </div>
 
-        <Redo className="opacity-50" size={50} />
+        <Redo className="w-full opacity-50" size={50} />
 
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex w-full flex-col items-center gap-5">
           <p className="text-4xl">😥</p>
           <p className="font-semibold">Step3 failure.</p>
         </div>
