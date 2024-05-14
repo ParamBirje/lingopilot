@@ -1,6 +1,7 @@
 import Navbar from "@/components/ui/navbar";
 import Hero from "./_components/hero";
 import Problem from "./_components/problem";
+import Features from "./_components/features";
 
 export default function HomePage() {
   return (
@@ -13,6 +14,8 @@ export default function HomePage() {
       <div className="h-[60vh] w-full rounded-md bg-base-200" />
 
       <Problem />
+
+      <Features />
     </main>
   );
 }
