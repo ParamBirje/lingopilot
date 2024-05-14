@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Problem() {
   return (
-    <div className="flex flex-col gap-5 rounded-md bg-base-200 py-28 text-center">
+    <div className="flex flex-col gap-5 py-28 text-center">
       <h2 className="scroll-m-20 text-4xl font-extrabold tracking-tight">
         This is the consequence of not having a conversation partner.
       </h2>
