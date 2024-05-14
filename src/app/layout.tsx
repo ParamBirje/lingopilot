@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html data-theme="dark" lang="en">
+    <html data-theme="light" lang="en">
       <body className={`font-sans ${raleway.variable}`}>{children}</body>
     </html>
   );
