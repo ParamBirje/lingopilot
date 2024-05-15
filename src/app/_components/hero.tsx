@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <div className="my-10 flex">
       <div className="flex w-2/3 flex-col gap-5">
-        <div className="badge badge-secondary p-3 text-xs font-bold uppercase tracking-wide text-white">
+        <div className="w-fit rounded-full bg-[#c989ac] px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
           The language learning copilot
         </div>
 
@@ -25,7 +25,7 @@ export default function Hero() {
             <p>Get Started</p>
           </button>
 
-          <button className="btn btn-primary btn-outline">
+          <button className="btn btn-outline btn-primary">
             <p>See LingoPilot in action →</p>
           </button>
 
@@ -47,7 +47,7 @@ export default function Hero() {
                 </div>
               </div>
               <div className="avatar placeholder">
-                <div className="bg-neutral text-neutral-content w-12">
+                <div className="w-12 bg-neutral text-neutral-content">
                   <span>+102</span>
                 </div>
               </div>
