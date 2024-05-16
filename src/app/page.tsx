@@ -3,6 +3,7 @@ import Hero from "./_components/hero";
 import Problem from "./_components/problem";
 import Features from "./_components/features";
 import FAQs from "./_components/faq";
+import Pricing from "./_components/pricing";
 
 export default function HomePage() {
   return (
@@ -17,6 +18,8 @@ export default function HomePage() {
       <Problem />
 
       <Features />
+
+      <Pricing />
 
       <FAQs />
     </main>
