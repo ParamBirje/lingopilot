@@ -5,26 +5,30 @@ import Features from "./_components/features";
 import FAQs from "./_components/faq";
 import Pricing from "./_components/pricing";
 import CTA from "./_components/cta";
+import Footer from "./_components/footer";
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 py-5">
-      <Navbar />
+    <>
+      <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 py-5">
+        <Navbar />
 
-      <Hero />
+        <Hero />
 
-      {/* Video/Screenshot placeholder */}
-      <div className="h-[60vh] w-full rounded-md bg-base-200" />
+        {/* Video/Screenshot placeholder */}
+        <div className="h-[60vh] w-full rounded-md bg-base-200" />
 
-      <Problem />
+        <Problem />
 
-      <Features />
+        <Features />
 
-      <Pricing />
+        <Pricing />
 
-      <FAQs />
+        <FAQs />
 
-      <CTA />
-    </main>
+        <CTA />
+      </main>
+      <Footer />
+    </>
   );
 }
