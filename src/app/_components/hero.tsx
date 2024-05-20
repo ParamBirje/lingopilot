@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
-    <div className="my-10 flex">
+    <div className="flex">
       <div className="flex w-2/3 flex-col gap-5">
         <div className="w-fit rounded-full bg-[#c989ac] px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
           The language learning copilot

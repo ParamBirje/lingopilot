@@ -8,11 +8,11 @@ import CTA from "./_components/cta";
 export default function HomePage() {
   return (
     <>
-      <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 py-5">
+      <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-10 py-5">
         <Hero />
 
         {/* Video/Screenshot placeholder */}
-        <div className="h-[60vh] w-full rounded-md bg-base-200" />
+        <div className="mt-5 h-[60vh] w-full rounded-md bg-slate-200" />
 
         <Problem />
 
