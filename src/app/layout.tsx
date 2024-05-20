@@ -21,16 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      className={`font-sans ${raleway.variable} flex flex-col gap-10`}
-      data-theme="light"
-      lang="en"
-    >
-      <Navbar />
+    <html data-theme="light" lang="en">
+      <body
+        className={`font-sans ${raleway.variable} flex w-full flex-col gap-10`}
+      >
+        <Navbar />
 
-      <body>{children}</body>
+        {children}
 
-      <Footer />
+        <Footer />
+      </body>
     </html>
   );
 }
