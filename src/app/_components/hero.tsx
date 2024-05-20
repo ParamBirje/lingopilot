@@ -1,6 +1,7 @@
 import Image from "next/image";
 import lightning from "@/lib/lightning.png";
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -20,10 +21,13 @@ export default function Hero() {
         </p>
 
         <div className="flex items-center gap-8">
-          <button className="btn btn-primary flex items-center gap-2 text-white">
+          <Link
+            href="/voice/engine"
+            className="btn btn-primary flex items-center gap-2 text-white"
+          >
             <Sparkles size={15} />
             <p>Get Started</p>
-          </button>
+          </Link>
 
           <button className="btn btn-outline btn-primary">
             <p>See LingoPilot in action →</p>
