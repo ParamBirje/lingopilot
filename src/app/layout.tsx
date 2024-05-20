@@ -1,6 +1,8 @@
+import Navbar from "@/components/ui/navbar";
 import "@/styles/globals.css";
 
 import { Raleway } from "next/font/google";
+import Footer from "./_components/footer";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -19,8 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html data-theme="light" lang="en">
-      <body className={`font-sans ${raleway.variable}`}>{children}</body>
+    <html
+      className={`font-sans ${raleway.variable} flex flex-col gap-10`}
+      data-theme="light"
+      lang="en"
+    >
+      <Navbar />
+
+      <body>{children}</body>
+
+      <Footer />
     </html>
   );
 }
