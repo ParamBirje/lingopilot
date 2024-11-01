@@ -1,11 +1,11 @@
 import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
 import { button as buttonStyles } from "@nextui-org/theme";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "@nextui-org/button";
 
 export default function Home() {
   return (
@@ -15,24 +15,25 @@ export default function Home() {
         <span className={title({ color: "violet" })}>copilot&nbsp;</span>
         <br />
         <span className={title()}>that supercharges language learning.</span>
-        <div className={subtitle({ class: "mt-4" })}>
+        <div className={subtitle({ class: "mt-6" })}>
           A fully interactive voice-enabled A.I language speaking assistant that
           refines & tones your language skills.
         </div>
       </div>
 
       <div className="flex gap-3">
-        <Link
-          isExternal
+        <Button
+          as={Link}
+          endContent={<ArrowRight size={20} />}
           className={buttonStyles({
             color: "primary",
             radius: "full",
             variant: "shadow",
           })}
-          href={siteConfig.links.docs}
+          href={siteConfig.links.signin}
         >
-          Documentation
-        </Link>
+          Get Started
+        </Button>
         <Link
           isExternal
           className={buttonStyles({ variant: "bordered", radius: "full" })}

@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackServerApp } from "../stack";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
@@ -40,7 +42,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
         )}
-      >
+      ><StackProvider app={stackServerApp}><StackTheme>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
             <Navbar />
@@ -59,7 +61,7 @@ export default function RootLayout({
             </footer>
           </div>
         </Providers>
-      </body>
+      </StackTheme></StackProvider></body>
     </html>
   );
 }
