@@ -1,17 +1,21 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + NextUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "LingoPilot - AI Language Learning",
+  description:
+    "Your AI language learning copilot that supercharges your language learning journey through comprehensive input-based learning and speaking practice.",
   navItems: [
     {
       label: "Home",
       href: "/",
     },
+
+    // TEST:ING
     {
-      label: "App",
-      href: "/app",
+      label: "Dashboard",
+      href: "/dashboard",
     },
+
     // {
     //   label: "Pricing",
     //   href: "/pricing",
@@ -59,6 +63,7 @@ export const siteConfig = {
     github: "https://github.com/nextui-org/nextui",
     twitter: "https://twitter.com/getnextui",
 
-    signin: "/handler/sign-up",
+    signin: "/handler/sign-in",
+    signup: "/handler/sign-up",
   },
 };

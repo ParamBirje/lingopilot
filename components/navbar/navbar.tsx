@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { TwitterIcon, GithubIcon, Logo } from "@/components/icons";
-import { User } from "@phosphor-icons/react/dist/ssr";
+import UserButtonClient from "./user-button";
 
 export const Navbar = () => {
   return (
@@ -57,16 +57,8 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.navItems[0].href}
-            startContent={<User size={16} weight="fill" />}
-            variant="flat"
-          >
-            Sign In
-          </Button>
+        <NavbarItem className="flex">
+          <UserButtonClient />
         </NavbarItem>
       </NavbarContent>
 
@@ -75,6 +67,7 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link>
         <ThemeSwitch />
+        <UserButtonClient />
         <NavbarMenuToggle />
       </NavbarContent>
     </NextUINavbar>
