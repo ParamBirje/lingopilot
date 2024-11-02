@@ -65,5 +65,10 @@ export const siteConfig = {
 
     signin: "/handler/sign-in",
     signup: "/handler/sign-up",
+
+    modes: {
+      characterConvo: "/dashboard/character-convo",
+      freestyle: "/dashboard/freestyle",
+    },
   },
 };

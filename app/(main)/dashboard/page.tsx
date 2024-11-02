@@ -1,6 +1,8 @@
 import { Card, CardHeader } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { title } from "@/components/primitives";
+import { Link } from "@nextui-org/link";
+import { siteConfig } from "@/config/site";
 
 export default function Page() {
   return (
@@ -22,6 +24,8 @@ export default function Page() {
         </Card>
         <Card
           isPressable
+          as={Link}
+          href={siteConfig.links.modes.characterConvo}
           className="w-full h-[300px] col-span-12 sm:col-span-7"
         >
           <CardHeader className="absolute z-10 top-1 flex-col items-start">
