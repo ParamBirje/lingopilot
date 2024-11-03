@@ -1,4 +1,7 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
+from ..util.db import supabase
 
 router = APIRouter()
 
@@ -10,9 +13,11 @@ async def get_languages(is_to: bool = False):
     """
 
     if is_to:
-        return {}
+        response = supabase.table("languages").select("*").eq("type", "TO").execute()
+    else:
+        response = supabase.table("languages").select("*").eq("type", "FROM").execute()
 
-    return {}
+    return JSONResponse(content=response.model_dump_json())
 
 
 @router.get("/difficulty")
@@ -20,4 +25,6 @@ async def get_difficulty():
     """
     Get all difficulty levels
     """
-    return {}
+
+    response = supabase.table("difficulty").select("*").execute()
+    return JSONResponse(content=response.model_dump_json())
