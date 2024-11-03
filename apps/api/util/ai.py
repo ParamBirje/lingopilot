@@ -1,9 +1,9 @@
-import os
-
 from openai import OpenAI
 
+from .env_config import SAMBANOVA_API_KEY
+
 client = OpenAI(
-    api_key=os.environ.get("SAMBANOVA_API_KEY"),
+    api_key=SAMBANOVA_API_KEY,
     base_url="https://api.sambanova.ai/v1",
 )
 
