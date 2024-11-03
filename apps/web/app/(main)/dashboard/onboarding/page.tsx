@@ -5,10 +5,9 @@ import { title } from "@/components/primitives";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { Divider } from "@nextui-org/divider";
-import { Link } from "@nextui-org/link";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from "@nextui-org/button";
-import { GaugeIcon, HeartIcon, LanguagesIcon } from "lucide-react";
+import { GaugeIcon, LanguagesIcon } from "lucide-react";
 
 export default function Page() {
   const fromLang = [

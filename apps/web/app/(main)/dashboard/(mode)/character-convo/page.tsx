@@ -19,7 +19,7 @@ export default function Page() {
     <div className="flex flex-col gap-12">
       <div className="text-center">
         <h1 className={title()}>Character Convo</h1>
-        <p className={subtitle({ class: "" })}>
+        <p className={subtitle()}>
           Practice your conversational skills with different characters in
           various scenes.
         </p>
@@ -57,9 +57,10 @@ export default function Page() {
             <p className="text-tiny uppercase font-bold">Alice</p>
             <small className="text-default-500">At the Bus Stop</small>
           </CardHeader>
-          <CardBody className="overflow-visible py-2 flex flex-col gap-2">
+          <CardBody className="overflow-visible py-2 pb-0 flex flex-col gap-3">
             <p className="text-default-500 text-sm">
-              Alice is waiting for the bus to go to home. Ask her about her day.
+              Alice is waiting for the bus to go to home. Start by asking her
+              about her day.
             </p>
             <Image
               alt="Card background"
@@ -68,7 +69,9 @@ export default function Page() {
             />
           </CardBody>
           <CardFooter className="flex justify-end">
-            <Button color="primary">Let&apos;s go!</Button>
+            <Button className="w-full" color="primary">
+              Let&apos;s go!
+            </Button>
           </CardFooter>
         </Card>
       </div>
