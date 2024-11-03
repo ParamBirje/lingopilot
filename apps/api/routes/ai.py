@@ -4,6 +4,7 @@ Handles the A.I agents
 """
 
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 
 from ..middleware.auth import authenticate_user
 
@@ -13,8 +14,13 @@ router = APIRouter(
 )
 
 
+class VoiceBodyParams(BaseModel):
+    text: str
+    character: str
+
+
 @router.post("/voice")
-async def get_voice_agent():
+async def get_voice_agent(body: VoiceBodyParams):
     """
     Takes in transcript from the user
     and returns a streaming response from the provided character
