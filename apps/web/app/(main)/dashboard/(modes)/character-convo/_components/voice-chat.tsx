@@ -8,6 +8,8 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { Button } from "@nextui-org/button";
+import { getVoiceResponse } from "@/services/api/ai-voice";
+import { useUser } from "@stackframe/stack";
 
 export default function VoiceChat() {
   const visualizerRef = useRef(null);
@@ -15,15 +17,105 @@ export default function VoiceChat() {
 
   const {
     transcript,
-    finalTranscript,
     resetTranscript,
     listening,
     browserSupportsSpeechRecognition,
     isMicrophoneAvailable,
   } = useSpeechRecognition();
 
-  const tempText =
-    "This is how the subtitle looks like. As you speak, the text will be updated here. AI's voice's text will be displayed here but in a different color.";
+  const user = useUser({ or: "redirect" });
+
+  async function handleStopRecording() {
+    const inputText = transcript;
+    SpeechRecognition.stopListening();
+
+    await getVoiceResponseFromAI(inputText);
+  }
+
+  async function getVoiceResponseFromAI(inputText: string) {
+    const { accessToken } = await user.getAuthJson();
+    const mediaSource = new MediaSource();
+
+    const audio = new Audio();
+    audio.src = URL.createObjectURL(mediaSource);
+
+    mediaSource.addEventListener("sourceopen", async () => {
+      const sourceBuffer = mediaSource.addSourceBuffer("audio/mpeg");
+
+      // Error handling for SourceBuffer
+      sourceBuffer.addEventListener("error", (error) => {
+        console.error("SourceBuffer error:", error);
+      });
+
+      const formData = new FormData();
+      formData.append("input_text", inputText);
+
+      const response = await getVoiceResponse(
+        inputText,
+        "en-US",
+        "Alice",
+        accessToken!,
+      );
+      if (!response) {
+        // TODO: show toast
+        console.error("Response not found");
+        return;
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        console.error("Reader not available");
+        return;
+      }
+
+      let isAppending = false; // Track appending state
+
+      function appendBuffer(value: Uint8Array) {
+        if (isAppending) {
+          return; // Prevent re-entrance
+        }
+
+        isAppending = true; // Mark as appending
+        sourceBuffer.appendBuffer(value); // Append the buffer
+      }
+
+      // Listen for when the source buffer has finished appending
+      sourceBuffer.addEventListener("updateend", () => {
+        isAppending = false; // Mark as not appending anymore
+
+        // Check if there is more data to append
+        // ignore this @typescript-eslint/no-floating-promises
+        void readStream();
+      });
+
+      // Function to read the stream
+      async function readStream() {
+        if (!reader) return;
+        const { done, value } = await reader.read();
+        if (done) {
+          // Check the MediaSource's readyState before ending the stream
+          if (mediaSource.readyState === "open") {
+            mediaSource.endOfStream();
+          }
+          return;
+        }
+
+        if (value) {
+          appendBuffer(value); // Call appendBuffer to handle appending safely
+        }
+      }
+
+      // Start reading the stream
+      void readStream();
+    });
+
+    // Await the audio play promise and handle potential errors
+    try {
+      await audio.play();
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  }
 
   useEffect(() => {
     if (!visualizerRef.current) return;
@@ -32,21 +124,21 @@ export default function VoiceChat() {
     if (listening) {
       let intervalTime = 200;
       intervalRef.current = setInterval(() => {
-        visualizer.style.width = `${Math.floor(Math.random() * 10) + 50}%`;
+        visualizer.style.width = `${Math.floor(Math.random() * 10) + 60}%`;
         intervalTime = Math.floor(Math.random() * 100) + 200;
       }, intervalTime);
     } else {
       clearInterval(intervalRef.current!);
-      visualizer.style.width = "50%";
+      visualizer.style.width = "60%";
     }
   }, [listening]);
 
   return (
     <div className="w-full h-full">
-      <div className="fixed bottom-[-70%] left-0 flex justify-center items-center h-full w-full">
+      <div className="fixed bottom-[-60%] left-0 flex justify-center items-center h-full w-full">
         <div
           ref={visualizerRef}
-          className="duration-150 bg-gradient-to-br from-primary-500 to-primary-700 opacity-10 w-[50%] aspect-square rounded-full blur-lg"
+          className="duration-150 bg-gradient-to-br from-primary-500 to-primary-700 opacity-[0.09] w-[50%] aspect-square rounded-full blur-3xl"
         />
       </div>
 
@@ -62,7 +154,7 @@ export default function VoiceChat() {
             class: "z-10 text-2xl lg:text-3xl text-center",
           })}
         >
-          {transcript || tempText}
+          {transcript || "..."}
         </p>
 
         {browserSupportsSpeechRecognition && isMicrophoneAvailable ? (
@@ -74,6 +166,7 @@ export default function VoiceChat() {
             <Button
               color="primary"
               onClick={() => {
+                resetTranscript();
                 SpeechRecognition.startListening({
                   language: "en-US",
                   continuous: true,
@@ -82,13 +175,13 @@ export default function VoiceChat() {
             >
               Start Listening
             </Button>
-            <Button color="danger" onClick={SpeechRecognition.stopListening}>
+            <Button color="danger" onClick={handleStopRecording}>
               Stop Listening
             </Button>
           </div>
         ) : (
           <p className="text-2xl text-center text-danger">
-            Mic not found / Browser doesn&apos;t support speech recog.
+            Mic not found / Browser doesn&apos;t support speech recognition.
           </p>
         )}
       </div>

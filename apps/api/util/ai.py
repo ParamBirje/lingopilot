@@ -19,6 +19,9 @@ LLAMA_8 = "Meta-Llama-3.1-8B-Instruct"
 LLAMA_70 = "Meta-Llama-3.1-70B-Instruct"
 LLAMA_405 = "Meta-Llama-3.1-405B-Instruct"
 
+LLAMA_2_1 = "Meta-Llama-3.2-1B-Instruct"
+LLAMA_2_3 = "Meta-Llama-3.2-3B-Instruct"
+
 LLAMA_VISION_11 = "Llama-3.2-11B-Vision-Instruct"
 LLAMA_VISION_90 = "Llama-3.2-90B-Vision-Instruct"
 
