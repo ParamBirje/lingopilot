@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { subtitle } from "@/components/primitives";
 import { Image } from "@nextui-org/image";
@@ -10,13 +10,18 @@ import SpeechRecognition, {
 import { Button } from "@nextui-org/button";
 import { getVoiceResponse } from "@/services/api/ai-voice";
 import { useUser } from "@stackframe/stack";
+import { MicIcon, MicOffIcon } from "lucide-react";
 
 export default function VoiceChat() {
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
 
+  const [autoMic, setAutoMic] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const {
     transcript,
+    interimTranscript,
     resetTranscript,
     listening,
     browserSupportsSpeechRecognition,
@@ -25,11 +30,38 @@ export default function VoiceChat() {
 
   const user = useUser({ or: "redirect" });
 
+  useEffect(() => {
+    const delayOffset = 800;
+
+    if (!interimTranscript) {
+      setTimeout(() => {
+        if (!interimTranscript && autoMic) {
+          handleStopRecording();
+        }
+      }, delayOffset);
+    }
+  }, [interimTranscript]);
+
+  function handleStartRecording() {
+    console.log("Listening...");
+
+    resetTranscript();
+    SpeechRecognition.startListening({
+      language: "en-US",
+      continuous: true,
+    });
+  }
+
   async function handleStopRecording() {
     const inputText = transcript;
     SpeechRecognition.stopListening();
+    if (!inputText) return;
+    if (loading) return;
 
+    setLoading(true);
+    console.log("Transcript:", inputText);
     await getVoiceResponseFromAI(inputText);
+    setLoading(false);
   }
 
   async function getVoiceResponseFromAI(inputText: string) {
@@ -53,9 +85,10 @@ export default function VoiceChat() {
       const response = await getVoiceResponse(
         inputText,
         "en-US",
-        "Alice",
+        "Ruth", // the voice linked to the character
         accessToken!,
       );
+
       if (!response) {
         // TODO: show toast
         console.error("Response not found");
@@ -72,28 +105,25 @@ export default function VoiceChat() {
 
       function appendBuffer(value: Uint8Array) {
         if (isAppending) {
-          return; // Prevent re-entrance
+          return;
         }
 
-        isAppending = true; // Mark as appending
-        sourceBuffer.appendBuffer(value); // Append the buffer
+        isAppending = true;
+        sourceBuffer.appendBuffer(value);
       }
 
       // Listen for when the source buffer has finished appending
       sourceBuffer.addEventListener("updateend", () => {
-        isAppending = false; // Mark as not appending anymore
+        isAppending = false;
 
-        // Check if there is more data to append
         // ignore this @typescript-eslint/no-floating-promises
         void readStream();
       });
 
-      // Function to read the stream
       async function readStream() {
         if (!reader) return;
         const { done, value } = await reader.read();
         if (done) {
-          // Check the MediaSource's readyState before ending the stream
           if (mediaSource.readyState === "open") {
             mediaSource.endOfStream();
           }
@@ -101,17 +131,20 @@ export default function VoiceChat() {
         }
 
         if (value) {
-          appendBuffer(value); // Call appendBuffer to handle appending safely
+          appendBuffer(value);
         }
       }
 
-      // Start reading the stream
       void readStream();
     });
 
-    // Await the audio play promise and handle potential errors
     try {
       await audio.play();
+      audio.onended = () => {
+        if (autoMic) {
+          handleStartRecording();
+        }
+      };
     } catch (error) {
       console.error("Error playing audio:", error);
     }
@@ -149,41 +182,44 @@ export default function VoiceChat() {
           alt="placeholder"
         />
 
-        <p
-          className={subtitle({
-            class: "z-10 text-2xl lg:text-3xl text-center",
-          })}
-        >
-          {transcript || "..."}
-        </p>
-
         {browserSupportsSpeechRecognition && isMicrophoneAvailable ? (
-          <div className="z-10 flex items-center gap-5">
-            <p className="text-2xl text-center">
-              {listening ? "Listening..." : "Not Listening"}
-            </p>
-
+          <div className="z-10 flex flex-col justify-center items-center gap-5">
             <Button
-              color="primary"
-              onClick={() => {
-                resetTranscript();
-                SpeechRecognition.startListening({
-                  language: "en-US",
-                  continuous: true,
-                });
-              }}
+              size="lg"
+              isIconOnly
+              color={listening ? "primary" : "danger"}
+              onClick={
+                listening
+                  ? () => {
+                      setAutoMic(false);
+                      handleStopRecording();
+                    }
+                  : () => {
+                      setAutoMic(true);
+                      handleStartRecording();
+                    }
+              }
             >
-              Start Listening
+              {listening ? <MicIcon size={30} /> : <MicOffIcon size={30} />}
             </Button>
-            <Button color="danger" onClick={handleStopRecording}>
-              Stop Listening
-            </Button>
+
+            <p className="text-lg text-center">
+              {listening ? "Listening" : "Not Listening"}
+            </p>
           </div>
         ) : (
           <p className="text-2xl text-center text-danger">
             Mic not found / Browser doesn&apos;t support speech recognition.
           </p>
         )}
+
+        <p
+          className={subtitle({
+            class: "z-10 text-2xl lg:text-3xl text-center",
+          })}
+        >
+          <p>{transcript || "..."}</p>
+        </p>
       </div>
     </div>
   );
