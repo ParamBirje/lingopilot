@@ -1,11 +1,13 @@
 """
 Description:
-Routes for the FastAPI app
+Routes for modes
 """
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 from ..middleware.auth import authenticate_user
+from ..util.db import supabase
 
 router = APIRouter(prefix="/modes")
 
@@ -23,13 +25,5 @@ async def character_convo():
     """
     Creates a new session for character convo
     also picks a random character
-    """
-    return {}
-
-
-@router.get("/character-convo/characters")
-async def get_character_convo_modes():
-    """
-    Get all character convo characters
     """
     return {}
