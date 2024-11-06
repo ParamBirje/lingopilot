@@ -10,8 +10,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from ..middleware.auth import authenticate_user
-from ..util.ai import (LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client,
-                       polly_client)
+from ..util.ai import LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client, polly_client
+from ..util.db import supabase
 
 router = APIRouter(
     prefix="/ai",
@@ -22,8 +22,10 @@ router = APIRouter(
 
 class VoiceBodyParams(BaseModel):
     text: str
-    character: str
+    voice_name: str
+    voice_engine: str
     language: str
+    session_id: str
 
 
 @router.post("/voice")
@@ -33,30 +35,38 @@ async def get_voice_agent(body: VoiceBodyParams):
     and returns a streaming response from the provided character
     """
 
+    # getting history
+    # TODO: can be optimized
+    response = (
+        supabase.table("conversations")
+        .select("role, content")
+        .eq("session_id", body.session_id)
+        .execute()
+    )
+
     start_time = time.perf_counter()
-    response = llm_client.chat.completions.create(
+    llm_response = llm_client.chat.completions.create(
         model=LLAMA_2_1,
         messages=[
             {
                 "role": "system",
-                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly return only a single string of plain text. You will always keep the conversation going by strictly ending with a question back to me. Sound natural by adding pauses.",
+                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me.",
             },
+            *response.data,
             {"role": "user", "content": body.text},
         ],
-        temperature=0.7,
-        top_p=0.7,
     )
 
-    ai_response = response.choices[0].message.content
+    ai_response = llm_response.choices[0].message.content
 
     end_time = time.perf_counter() - start_time
     print(f"Time taken to generate LLM response: {end_time:.2f}s")
 
     polly_response = polly_client.synthesize_speech(
-        Engine="generative",
+        Engine=body.voice_engine,
         Text=ai_response,
         OutputFormat="mp3",
-        VoiceId="Ruth",  # TODO: Change this to the character provided in the request
+        VoiceId=body.voice_name,
     )
 
     audio_stream = polly_response["AudioStream"]
@@ -68,5 +78,29 @@ async def get_voice_agent(body: VoiceBodyParams):
             yield data
             data = audio_stream.read(1024)
         audio_stream.close()
+
+    # Write to db
+    # TODO: add this to async task
+    try:
+        write_response = (
+            supabase.table("conversations")
+            .insert(
+                [
+                    {
+                        "role": "user",
+                        "content": body.text,
+                        "session_id": body.session_id,
+                    },
+                    {
+                        "role": "assistant",
+                        "content": ai_response,
+                        "session_id": body.session_id,
+                    },
+                ]
+            )
+            .execute()
+        )
+    except Exception as e:
+        print(e)
 
     return StreamingResponse(audio_streaming(), media_type="audio/mpeg")
