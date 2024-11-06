@@ -16,16 +16,16 @@ import { getCharacters } from "@/services/api/characters";
 import { createCharacterConvoSession } from "@/services/api/modes/character-convo";
 import { useEffect, useState } from "react";
 import { DicesIcon } from "lucide-react";
+import { useAtom } from "jotai";
+import { sessionAtom } from "@/components/atoms";
 
 export default async function CharacterSelector({
   accessToken,
-  session,
-  setSession,
 }: {
   accessToken: string;
-  session: CharacterConvoSession;
-  setSession: (session: CharacterConvoSession) => void;
 }) {
+  const [session, setSession] = useAtom(sessionAtom);
+
   const {
     data: characters,
     isLoading,
@@ -52,6 +52,7 @@ export default async function CharacterSelector({
   };
 
   const handleLetsGo = () => {
+    if (!session) return;
     setSession({ ...session, voice_chat_view: true });
   };
 
@@ -100,13 +101,14 @@ export default async function CharacterSelector({
         className="w-fit"
         color="primary"
         onClick={handleRoll}
+        isLoading={createSession.isPending}
         endContent={<DicesIcon />}
         size="lg"
       >
         {createSession.isSuccess && "Re-"}Roll
       </Button>
 
-      {createSession.isSuccess && (
+      {createSession.isSuccess && session && (
         <div className="h-full w-full flex justify-center items-center">
           <Card className="max-w-sm">
             <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">

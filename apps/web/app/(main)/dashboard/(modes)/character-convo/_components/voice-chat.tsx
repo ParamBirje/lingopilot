@@ -11,8 +11,14 @@ import { Button } from "@nextui-org/button";
 import { getVoiceResponse } from "@/services/api/ai-voice";
 import { useUser } from "@stackframe/stack";
 import { MicIcon, MicOffIcon } from "lucide-react";
+import { sessionAtom } from "@/components/atoms";
+import { useAtomValue } from "jotai";
+import { useRouter } from "next/navigation";
 
 export default function VoiceChat() {
+  const session = useAtomValue(sessionAtom);
+  const router = useRouter();
+
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
 
@@ -43,10 +49,9 @@ export default function VoiceChat() {
   }, [interimTranscript]);
 
   function handleStartRecording() {
-    console.log("Listening...");
-    if (listening) return;
-
     resetTranscript();
+
+    console.log("Listening...");
     SpeechRecognition.startListening({
       language: "en-US",
       continuous: true,
@@ -80,13 +85,12 @@ export default function VoiceChat() {
         console.error("SourceBuffer error:", error);
       });
 
-      const formData = new FormData();
-      formData.append("input_text", inputText);
-
       const response = await getVoiceResponse(
         inputText,
         "en-US",
-        "Ruth", // the voice linked to the character
+        session?.character.voice_name!,
+        session?.character.voice_engine!,
+        session?.session_id!,
         accessToken!,
       );
 

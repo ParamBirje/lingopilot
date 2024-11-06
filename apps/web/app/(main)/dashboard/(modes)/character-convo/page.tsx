@@ -1,13 +1,13 @@
 "use client";
 
-import { CharacterConvoSession } from "@/types";
 import CharacterSelector from "./_components/selector";
 import VoiceChat from "./_components/voice-chat";
-import { useState } from "react";
 import { useUser } from "@stackframe/stack";
+import { sessionAtom } from "@/components/atoms";
+import { useAtomValue } from "jotai";
 
 export default async function Page() {
-  const [session, setSession] = useState<CharacterConvoSession>();
+  const session = useAtomValue(sessionAtom);
 
   const user = useUser({ or: "redirect" });
   const { accessToken } = await user.getAuthJson();
@@ -15,12 +15,6 @@ export default async function Page() {
   if (session?.voice_chat_view) {
     return <VoiceChat />;
   } else {
-    return (
-      <CharacterSelector
-        session={session!}
-        setSession={setSession}
-        accessToken={accessToken!}
-      />
-    );
+    return <CharacterSelector accessToken={accessToken!} />;
   }
 }

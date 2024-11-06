@@ -3,7 +3,9 @@ import domain from "../domain";
 export const getVoiceResponse = async (
   text: string,
   language: string,
-  character: string,
+  voice_name: string,
+  voice_engine: string,
+  session_id: string,
 
   accessToken: string,
 ): Promise<Response | null> => {
@@ -14,7 +16,13 @@ export const getVoiceResponse = async (
         "Content-Type": "application/json",
         "x-stack-access-token": accessToken,
       },
-      body: JSON.stringify({ text, language, character }),
+      body: JSON.stringify({
+        text,
+        language,
+        voice_name,
+        voice_engine,
+        session_id,
+      }),
     });
     return response;
   } catch (error) {
