@@ -31,7 +31,7 @@ export default function Home() {
             radius: "full",
             variant: "shadow",
           })}
-          href={siteConfig.links.signup}
+          href={siteConfig.links.dashboard}
         >
           Get Started
         </Button>

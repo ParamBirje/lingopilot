@@ -44,6 +44,7 @@ export default function VoiceChat() {
 
   function handleStartRecording() {
     console.log("Listening...");
+    if (listening) return;
 
     resetTranscript();
     SpeechRecognition.startListening({

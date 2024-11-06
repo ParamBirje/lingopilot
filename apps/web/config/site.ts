@@ -65,6 +65,7 @@ export const siteConfig = {
 
     signin: "/handler/sign-in",
     signup: "/handler/sign-up",
+    dashboard: "/dashboard",
 
     modes: {
       characterConvo: "/dashboard/character-convo",
