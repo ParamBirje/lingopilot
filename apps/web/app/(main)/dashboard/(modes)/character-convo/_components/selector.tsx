@@ -14,7 +14,6 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCharacters } from "@/services/api/characters";
 import { createCharacterConvoSession } from "@/services/api/modes/character-convo";
-import { useEffect, useState } from "react";
 import { DicesIcon } from "lucide-react";
 import { useAtom } from "jotai";
 import { sessionAtom } from "@/components/atoms";
@@ -126,8 +125,11 @@ export default async function CharacterSelector({
               </p>
               <Image
                 alt="Card background"
-                className="object-cover rounded-xl w-full"
-                src="https://nextui.org/images/hero-card-complete.jpeg"
+                className="object-cover rounded-xl w-full aspect-video"
+                src={
+                  session.image ||
+                  "https://nextui.org/images/hero-card-complete.jpeg"
+                }
               />
             </CardBody>
             <CardFooter className="flex justify-end">

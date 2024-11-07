@@ -47,7 +47,7 @@ async def get_voice_agent(body: VoiceBodyParams):
 
     start_time = time.perf_counter()
     llm_response = llm_client.chat.completions.create(
-        model=LLAMA_2_1,
+        model=LLAMA_70,
         messages=[
             {
                 "role": "system",

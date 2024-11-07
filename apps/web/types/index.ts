@@ -23,6 +23,7 @@ export type CharacterConvoSessionCreate = {
 export type CharacterConvoSession = CharacterConvoSessionCreate & {
   character: Character;
   session_id: string;
+  image: string | null;
 
   voice_chat_view?: boolean; // for frontend use
 };
