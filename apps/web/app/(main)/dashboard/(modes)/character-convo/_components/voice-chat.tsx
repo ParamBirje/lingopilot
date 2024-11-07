@@ -182,8 +182,11 @@ export default function VoiceChat() {
 
       <div className="my-auto h-full w-full flex flex-col justify-center items-center gap-10">
         <Image
-          className="z-10 rounded-xl bg-white mx-auto w-3/4 md:w-2/3 aspect-w-16 aspect-h-9"
-          src="https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg"
+          className="z-10 rounded-xl bg-white mx-auto w-3/4 md:w-2/3 aspect-video object-cover"
+          src={
+            session?.image ||
+            "https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg"
+          }
           alt="placeholder"
         />
 

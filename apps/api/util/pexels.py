@@ -3,6 +3,8 @@ Description:
 Responsible for fetching images from Pexels API
 """
 
+import random
+
 import requests
 
 from .env_config import PEXELS_API_KEY
@@ -32,4 +34,7 @@ def get_pexels_image(query: str, per_page: int = 1) -> str | None:
         print("No photos found")
         return None
 
-    return data["photos"][0]["src"]["original"]
+    total_results = len(data["photos"])
+    random_index = random.randint(0, total_results - 1)
+
+    return data["photos"][random_index]["src"]["original"]
