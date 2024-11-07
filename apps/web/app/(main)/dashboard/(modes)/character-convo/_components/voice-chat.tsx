@@ -12,11 +12,11 @@ import { getVoiceResponse } from "@/services/api/ai-voice";
 import { useUser } from "@stackframe/stack";
 import { MicIcon, MicOffIcon } from "lucide-react";
 import { sessionAtom } from "@/components/atoms";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 
 export default function VoiceChat() {
-  const session = useAtomValue(sessionAtom);
+  const [session, setSession] = useAtom(sessionAtom);
   const router = useRouter();
 
   const visualizerRef = useRef(null);

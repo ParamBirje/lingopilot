@@ -3,6 +3,7 @@ Description:
 Handles the A.I agents
 """
 
+import asyncio
 import time
 
 from fastapi import APIRouter, Depends
@@ -62,6 +63,8 @@ async def get_voice_agent(body: VoiceBodyParams):
     end_time = time.perf_counter() - start_time
     print(f"Time taken to generate LLM response: {end_time:.2f}s")
 
+    asyncio.create_task(write_to_db(body, ai_response))
+
     polly_response = polly_client.synthesize_speech(
         Engine=body.voice_engine,
         Text=ai_response,
@@ -79,28 +82,32 @@ async def get_voice_agent(body: VoiceBodyParams):
             data = audio_stream.read(1024)
         audio_stream.close()
 
-    # Write to db
-    # TODO: add this to async task
+    return StreamingResponse(audio_streaming(), media_type="audio/mpeg")
+
+
+# Helper functions
+
+
+def write_to_database_sync(body, ai_response):
     try:
-        write_response = (
-            supabase.table("conversations")
-            .insert(
-                [
-                    {
-                        "role": "user",
-                        "content": body.text,
-                        "session_id": body.session_id,
-                    },
-                    {
-                        "role": "assistant",
-                        "content": ai_response,
-                        "session_id": body.session_id,
-                    },
-                ]
-            )
-            .execute()
-        )
+        supabase.table("conversations").insert(
+            [
+                {
+                    "role": "user",
+                    "content": body.text,
+                    "session_id": body.session_id,
+                },
+                {
+                    "role": "assistant",
+                    "content": ai_response,
+                    "session_id": body.session_id,
+                },
+            ]
+        ).execute()
     except Exception as e:
         print(e)
 
-    return StreamingResponse(audio_streaming(), media_type="audio/mpeg")
+
+async def write_to_db(body, ai_response):
+    loop = asyncio.get_running_loop()
+    await loop.run_in_executor(None, write_to_database_sync, body, ai_response)
