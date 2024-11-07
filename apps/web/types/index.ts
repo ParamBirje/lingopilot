@@ -26,3 +26,24 @@ export type CharacterConvoSession = CharacterConvoSessionCreate & {
 
   voice_chat_view?: boolean; // for frontend use
 };
+
+export type Language = {
+  id: number;
+  type?: string;
+  flag: string;
+  isDisabled: boolean;
+  key: string;
+  name: string;
+};
+
+export type Difficulty = {
+  id: number;
+  emoji: string;
+  label: string;
+};
+
+export type UserOnboarding = {
+  fromLang?: Language;
+  toLang?: Language;
+  difficulty?: Difficulty;
+};

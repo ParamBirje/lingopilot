@@ -3,8 +3,15 @@ import { Image } from "@nextui-org/image";
 import { title } from "@/components/primitives";
 import { Link } from "@nextui-org/link";
 import { siteConfig } from "@/config/site";
+import { stackServerApp } from "@/stack";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  const user = await stackServerApp.getUser({ or: "redirect" });
+  if (!user.clientMetadata?.onboarded) {
+    redirect(siteConfig.links.onboarding);
+  }
+
   return (
     <div className="w-full px-8 flex flex-col gap-8">
       <h1 className={title({ class: "text-left" })}>Dashboard</h1>
