@@ -4,13 +4,13 @@ Routes for modes
 """
 
 import random
-import uuid
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from starlette.requests import Request
 
-from ..middleware.auth import authenticate_user
+from ..middleware.auth import authenticate_user, get_user_id
 from ..util.db import supabase
 from ..util.pexels import get_pexels_image
 
@@ -30,21 +30,21 @@ class CharacterConvoCreateBody(BaseModel):
     language: str
 
 
-@router.post("/character-convo", dependencies=[Depends(authenticate_user)])
-async def character_convo(body: CharacterConvoCreateBody):
+@router.post("/character-convo")
+async def character_convo(request: Request, body: CharacterConvoCreateBody):
     """
     Creates a new session for character convo
     also picks a random character
     """
+    user_id = get_user_id(request)  # also raises if not authenticated
     response = supabase.table("characters").select("*").execute()
     characters = response.data
 
     random_character = characters[random.randint(0, len(characters) - 1)]
-    session_id = str(uuid.uuid4())
-
     image = get_pexels_image(random_character["description"])
 
-    # TODO: create session in db
+    insert_response = supabase.table("sessions").insert({"user_id": user_id}).execute()
+    session_id = insert_response.data[0]["id"]
 
     return JSONResponse(
         content={

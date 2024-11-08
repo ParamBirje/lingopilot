@@ -5,7 +5,7 @@ export const getVoiceResponse = async (
   language: string,
   voice_name: string,
   voice_engine: string,
-  session_id: string,
+  session_id: number,
 
   accessToken: string,
 ): Promise<Response | null> => {

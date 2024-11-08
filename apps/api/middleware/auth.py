@@ -14,7 +14,7 @@ AUTH_PROJECT_ID = str(os.environ.get("STACK_PROJECT_ID"))
 AUTH_SECRET = str(os.environ.get("STACK_SECRET_SERVER_KEY"))
 
 
-async def authenticate_user(request: Request):
+def authenticate_user(request: Request):
     """
     Authenticate the user
     """
@@ -36,3 +36,27 @@ async def authenticate_user(request: Request):
         )
 
     print(f"User is authenticated: {user_id}")
+
+
+def get_user_id(request: Request):
+    """
+    Get the user id
+    """
+
+    headers = {
+        "x-stack-access-type": "server",
+        "x-stack-project-id": AUTH_PROJECT_ID,
+        "x-stack-secret-server-key": AUTH_SECRET,
+        "x-stack-access-token": request.headers.get("x-stack-access-token"),
+    }
+
+    response = requests.get(AUTH_URL, headers=headers, timeout=10)
+    user_id = response.json().get("id")
+    if user_id is None:
+        print("User is not authenticated")
+        raise HTTPException(
+            status_code=401,
+            detail="User is not authenticated",
+        )
+
+    return user_id

@@ -11,7 +11,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from ..middleware.auth import authenticate_user
-from ..util.ai import LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client, polly_client
+from ..util.ai import (LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client,
+                       polly_client)
 from ..util.db import supabase
 
 router = APIRouter(
@@ -26,7 +27,7 @@ class VoiceBodyParams(BaseModel):
     voice_name: str
     voice_engine: str
     language: str
-    session_id: str
+    session_id: int
 
 
 @router.post("/voice")
