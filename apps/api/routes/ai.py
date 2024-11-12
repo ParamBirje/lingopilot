@@ -11,8 +11,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from ..middleware.auth import authenticate_user
-from ..util.ai import (LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client,
-                       polly_client)
+from ..util.ai import LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client, polly_client
 from ..util.db import supabase
 
 router = APIRouter(
@@ -48,11 +47,11 @@ async def get_voice_agent(body: VoiceBodyParams):
 
     start_time = time.perf_counter()
     llm_response = llm_client.chat.completions.create(
-        model=LLAMA_70,
+        model=LLAMA_8,
         messages=[
             {
                 "role": "system",
-                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me.",
+                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me. Also you are secretly helping me speak properly, so if I make mistakes do correct me then continue the conversation.",
             },
             *response.data,
             {"role": "user", "content": body.text},

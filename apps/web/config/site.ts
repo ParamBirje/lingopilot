@@ -71,6 +71,7 @@ export const siteConfig = {
     modes: {
       characterConvo: "/dashboard/character-convo",
       freestyle: "/dashboard/freestyle",
+      pictureQuest: "/dashboard/picture-quest",
     },
   },
 };

@@ -18,6 +18,8 @@ import { useRouter } from "next/navigation";
 export default function VoiceChat() {
   const [session, setSession] = useAtom(sessionAtom);
   const router = useRouter();
+  const user = useUser({ or: "redirect" });
+  const userFromLang = user.clientMetadata?.fromLang || "en-US";
 
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
@@ -33,8 +35,6 @@ export default function VoiceChat() {
     browserSupportsSpeechRecognition,
     isMicrophoneAvailable,
   } = useSpeechRecognition();
-
-  const user = useUser({ or: "redirect" });
 
   useEffect(() => {
     const delayOffset = 800;
@@ -87,7 +87,7 @@ export default function VoiceChat() {
 
       const response = await getVoiceResponse(
         inputText,
-        "en-US",
+        userFromLang,
         session?.character.voice_name!,
         session?.character.voice_engine!,
         session?.session_id!,
@@ -158,7 +158,7 @@ export default function VoiceChat() {
   useEffect(() => {
     if (!visualizerRef.current) return;
 
-    const visualizer = visualizerRef.current!;
+    const visualizer = visualizerRef.current! as HTMLDivElement;
     if (listening) {
       let intervalTime = 200;
       intervalRef.current = setInterval(() => {

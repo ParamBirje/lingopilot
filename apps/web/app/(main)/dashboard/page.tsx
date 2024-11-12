@@ -17,10 +17,15 @@ export default async function Page() {
       <h1 className={title({ class: "text-left" })}>Dashboard</h1>
 
       <div className="gap-2 grid grid-cols-12 grid-rows-2">
-        <Card className="w-full h-[300px] col-span-12 sm:col-span-5">
+        <Card
+          isPressable
+          as={Link}
+          href={siteConfig.links.modes.pictureQuest}
+          className="w-full h-[300px] col-span-12 sm:col-span-5"
+        >
           <CardHeader className="absolute z-10 top-1 flex-col items-start">
             <p className="text-tiny text-white/60 uppercase font-bold">Mode</p>
-            <h4 className="text-white/90 font-medium text-xl">Freestyle</h4>
+            <h4 className="text-white/90 font-medium text-xl">Picture Quest</h4>
           </CardHeader>
           <Image
             removeWrapper
