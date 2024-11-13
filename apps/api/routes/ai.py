@@ -36,8 +36,6 @@ async def get_voice_agent(body: VoiceBodyParams):
     and returns a streaming response from the provided character
     """
 
-    # getting history
-    # TODO: can be optimized
     response = (
         supabase.table("conversations")
         .select("role, content")
@@ -46,12 +44,13 @@ async def get_voice_agent(body: VoiceBodyParams):
     )
 
     start_time = time.perf_counter()
+    print(f"Starting at: {time.time()}")
     llm_response = llm_client.chat.completions.create(
         model=LLAMA_8,
         messages=[
             {
                 "role": "system",
-                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me. Also you are secretly helping me speak properly, so if I make mistakes do correct me then continue the conversation.",
+                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me. Also you are secretly helping me speak properly, so if I make mistakes do correct me in a concise manner then continue the conversation.",
             },
             *response.data,
             {"role": "user", "content": body.text},
@@ -62,6 +61,7 @@ async def get_voice_agent(body: VoiceBodyParams):
 
     end_time = time.perf_counter() - start_time
     print(f"Time taken to generate LLM response: {end_time:.2f}s")
+    print(f"Ended at: {time.time()}")
 
     asyncio.create_task(write_to_db(body, ai_response))
 
