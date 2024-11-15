@@ -16,8 +16,7 @@ from ..util.db import supabase
 
 router = APIRouter(
     prefix="/ai",
-    # TODO: enable authentication in prod
-    # dependencies=[Depends(authenticate_user)],
+    dependencies=[Depends(authenticate_user)],
 )
 
 
