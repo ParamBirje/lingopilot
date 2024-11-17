@@ -3,21 +3,11 @@
 import { Card, CardFooter } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { subtitle, title } from "@/components/primitives";
-import { Link } from "@nextui-org/link";
-import { siteConfig } from "@/config/site";
-import { Button } from "@nextui-org/button";
-import { PlayIcon } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  createPictureQuestSession,
-  getPreviousQuests,
-} from "@/services/api/modes/picture-quest";
-import { PictureQuestSession, PictureQuestSessionCreate } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { getPreviousQuests } from "@/services/api/modes/picture-quest";
 import { pictureQuestAtom } from "@/components/atoms";
 import { useAtom } from "jotai";
-import { useDisclosure } from "@nextui-org/modal";
-import { useState } from "react";
-import PlayModal from "./modal";
+import PlayModal from "./play-modal";
 import Spinner from "@/components/spinner";
 
 export default async function PictureQuestsDashboard({
@@ -26,8 +16,6 @@ export default async function PictureQuestsDashboard({
   accessToken: string;
 }) {
   const [session, setSession] = useAtom(pictureQuestAtom);
-  const [topic, setTopic] = useState<string>("");
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const {
     data: previousQuests,
@@ -37,21 +25,6 @@ export default async function PictureQuestsDashboard({
     queryKey: ["previous-quests"],
     queryFn: async () => await getPreviousQuests(accessToken),
   });
-
-  const createSession = useMutation({
-    mutationFn: async (params: PictureQuestSessionCreate) =>
-      await createPictureQuestSession(accessToken, params),
-    onSuccess: (data: PictureQuestSession) => {
-      setSession(data);
-      setTopic("");
-      onClose();
-    },
-  });
-
-  function handleSessionCreate() {
-    if (!topic) return;
-    createSession.mutate({ topic: topic });
-  }
 
   if (isError) return <p>Something went wrong. Try again?</p>;
   if (isLoading) return <Spinner />;
@@ -65,15 +38,7 @@ export default async function PictureQuestsDashboard({
         </p>
       </div>
 
-      <Button
-        className="w-fit"
-        color="primary"
-        size="lg"
-        startContent={<PlayIcon size={24} />}
-        onClick={onOpen}
-      >
-        Start Quest
-      </Button>
+      <PlayModal accessToken={accessToken} />
 
       <h3 className={subtitle({ class: "text-left" })}>Previous Quests</h3>
 
@@ -103,16 +68,6 @@ export default async function PictureQuestsDashboard({
           </Card>
         ))}
       </div>
-
-      {/* Modal */}
-      <PlayModal
-        topic={topic}
-        setTopic={setTopic}
-        onSuccess={handleSessionCreate}
-        isButtonLoading={createSession.isPending}
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      />
     </div>
   );
 }
