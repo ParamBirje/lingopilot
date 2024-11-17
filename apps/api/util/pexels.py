@@ -70,7 +70,7 @@ def get_pexels_images(query: str, num_images: int = 5) -> list[str]:
     another_random_no = random.randint(1, 10)
     random_no = random.randint(another_random_no, 15)
     random_color = colors[len(colors) - another_random_no]
-    url = f"https://api.pexels.com/v1/search?query={query}&per_page={num_images}&size=small&page={random_no}"
+    url = f"https://api.pexels.com/v1/search?query={query}&per_page={num_images}&size=small&page={random_no}&orientation=landscape"
     response = requests.get(url, headers=headers, timeout=20)
 
     if response.status_code != 200:

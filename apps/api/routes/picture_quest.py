@@ -107,7 +107,7 @@ class VerifyQuestionsBodyParams(BaseModel):
     session_id: int
 
 
-@router.post("/verify", dependencies=[Depends(authenticate_user)])
+@router.patch("/verify", dependencies=[Depends(authenticate_user)])
 async def verify_questions(body: VerifyQuestionsBodyParams):
     """
     Checks the answers and updates expected_answer and reason

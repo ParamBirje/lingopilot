@@ -20,10 +20,11 @@ async def verify_image_questions(questions: list[dict]):
                 "type": "text",
                 "text": """
                     For the image below, check whether the provided answer has correct grammar, spelling according
-                    to the question about the image.
+                    to the question about the image. You are only checking the grammar and spelling of the answer.
 
-                    Let the user write their answer in their own way.
+                    Let the user write and describe in their own way.
                     Don't be too strict. If the answer is how a normal person would say it, then it's correct.
+                    You will allow opinions and descriptions and all types of answers, just check the grammar and spelling.
                 """,
             },
             {
@@ -41,8 +42,10 @@ async def verify_image_questions(questions: list[dict]):
                         "reason": "Reason here"
                     }}
 
-                    If the Answer is wrong then you will provide expected_answer and reason why.
-                    If the answer is correct, then you will return null for both.
+                    If the Answer is wrong then you will provide expected_answer where you will rewrite the correct answer and
+                    also provide the reason why it is correct.
+
+                    If the answer is already correct, then you will strictly return null for both.
 
                     Question: {question["title"]}
                     Answer: {question["answer"]}
@@ -84,9 +87,15 @@ async def verify_image_questions(questions: list[dict]):
                     I want you to go through the verification_description of each question and extract the information
                     for expected_answer and reason. Don't write me any function, YOU will do it yourself.
 
+                    The expected_answer should not be one word, it should be a sentence. It should feel like it is a
+                    rewrite of the "answer" but with correct grammar and spelling. The reason should be a concise explanation
+                    of why the expected_answer is correct.
+
                     Questions: {verified_questions}
 
-                    If the answer is correct, then expected_answer and reason should be null.
+                    Please: if the "answer" already has correct grammar and is a sentence, strictly ignore the verification_description and strictly return null 
+                    for both expected_answer and reason.
+
                     Don't include verification_description in the response.
 
                     Return the extracted information in strictly json like so:

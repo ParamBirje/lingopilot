@@ -13,14 +13,8 @@ from starlette.requests import Request
 
 from ..helpers.picture_quest_session import retrieve_image_questions
 from ..middleware.auth import authenticate_user, get_user_id
-from ..util.ai import (
-    LLAMA_2_1,
-    LLAMA_2_3,
-    LLAMA_8,
-    LLAMA_70,
-    LLAMA_VISION_11,
-    llm_client,
-)
+from ..util.ai import (LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70,
+                       LLAMA_VISION_11, llm_client)
 from ..util.db import supabase
 from ..util.pexels import get_pexels_image
 
@@ -134,7 +128,7 @@ async def picture_quest(request: Request, body: PictureQuestCreateBody):
                 "role": "user",
                 "content": f"""
                     I want you to generate 2-3 keywords (to search images on pexels) about this topic: {body.topic} 
-                    You will also generate a suitable concise, short title relevant to the topic. The title should be about the topic,
+                    You will also generate a suitable concise, short creative title relevant to the topic. The title should be about the topic,
                     don't include Images in the title.
 
                     I want you to strictly return only json as follows:
