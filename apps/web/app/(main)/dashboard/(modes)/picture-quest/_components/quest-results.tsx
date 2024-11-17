@@ -3,7 +3,7 @@ import { Image } from "@nextui-org/image";
 import { subtitle, title } from "@/components/primitives";
 import { getQuestions } from "@/services/api/modes/picture-quest";
 import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import React from "react";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
@@ -11,9 +11,11 @@ import { CheckIcon, InfoIcon, UserIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { CircularProgress } from "@nextui-org/progress";
 import Spinner from "@/components/spinner";
+import PlayModal from "./play-modal";
+import { Button } from "@nextui-org/button";
 
 export default function QuestResults({ accessToken }: { accessToken: string }) {
-  const session = useAtomValue(pictureQuestAtom);
+  const [session, setSession] = useAtom(pictureQuestAtom);
   const currentQuest = session!;
 
   const {
@@ -59,6 +61,17 @@ export default function QuestResults({ accessToken }: { accessToken: string }) {
           </div>
         </CardBody>
       </Card>
+
+      <div className="mt-4 flex items-center gap-4">
+        <PlayModal label="New Quest" accessToken={accessToken} />
+        <Button
+          variant="bordered"
+          size="lg"
+          onClick={() => setSession(undefined)}
+        >
+          Back to Quests
+        </Button>
+      </div>
 
       <div className="gap-y-10 gap-x-6 grid grid-cols-12 grid-rows-2 mt-6">
         {questionsData?.map((question) => (

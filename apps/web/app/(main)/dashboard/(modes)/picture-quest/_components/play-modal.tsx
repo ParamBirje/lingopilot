@@ -30,7 +30,13 @@ const sampleTopics = [
   "Batman",
 ];
 
-export default function PlayModal({ accessToken }: { accessToken: string }) {
+export default function PlayModal({
+  accessToken,
+  label = "Start Quest",
+}: {
+  accessToken: string;
+  label?: string;
+}) {
   const [session, setSession] = useAtom(pictureQuestAtom);
   const [topic, setTopic] = React.useState<string>("");
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -59,7 +65,7 @@ export default function PlayModal({ accessToken }: { accessToken: string }) {
         startContent={<PlayIcon size={24} />}
         onClick={onOpen}
       >
-        Start Quest
+        {label}
       </Button>
 
       <Modal

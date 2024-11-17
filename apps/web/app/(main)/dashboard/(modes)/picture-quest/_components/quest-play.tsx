@@ -164,18 +164,28 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
           description="Avoid one word answers. Be descriptive."
         />
 
-        <Button
-          className="w-fit place-self-end"
-          color="secondary"
-          size="lg"
-          type="submit"
-          isLoading={
-            updateAnswerMutation.isPending || endSessionMutation.isPending
-          }
-          endContent={<ArrowRightIcon size={16} />}
-        >
-          Next
-        </Button>
+        <div className="flex justify-between items-center gap-4">
+          <Button
+            variant="bordered"
+            size="lg"
+            onClick={() => setSession(undefined)}
+          >
+            Continue Later
+          </Button>
+
+          <Button
+            className="w-fit place-self-end"
+            color="secondary"
+            size="lg"
+            type="submit"
+            isLoading={
+              updateAnswerMutation.isPending || endSessionMutation.isPending
+            }
+            endContent={<ArrowRightIcon size={16} />}
+          >
+            Next
+          </Button>
+        </div>
       </form>
     </div>
   );
