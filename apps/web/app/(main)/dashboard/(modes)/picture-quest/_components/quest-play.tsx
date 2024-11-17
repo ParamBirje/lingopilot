@@ -23,33 +23,32 @@ import { endSession } from "@/services/api/modes/session";
 export default function QuestPlay({ accessToken }: { accessToken: string }) {
   const [session, setSession] = useAtom(pictureQuestAtom);
   const currentQuest = session!;
-  // const shouldFetchQuestions =
-  //   !currentQuest.questions || currentQuest.questions.length <= 1;
-
-  // const {
-  //   data: questions,
-  //   isLoading,
-  //   isError,
-  // } = useQuery({
-  //   queryKey: ["questions", currentQuest.id],
-  //   queryFn: async () => await getQuestions(accessToken, currentQuest.id),
-  //   enabled: shouldFetchQuestions,
-  // });
-  //
-  // useEffect(() => {
-  //   if (questions) {
-  //     setSession({
-  //       ...currentQuest,
-  //       questions,
-  //     });
-  //   }
-  // }, [questions]);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState<PictureQuestQuestion>(
-    currentQuest.questions![currentQuestionIndex],
-  );
-  const [answer, setAnswer] = useState(currentQuestion.answer || "");
+  const [currentQuestion, setCurrentQuestion] =
+    useState<PictureQuestQuestion | null>(null);
+  const [answer, setAnswer] = useState(currentQuestion?.answer || "");
+
+  const {
+    data: questionsData,
+    isLoading: isLoadingQuestions,
+    isError,
+  } = useQuery({
+    queryKey: ["questions", currentQuest.id],
+    queryFn: async () => await getQuestions(accessToken, currentQuest.id),
+    enabled: !currentQuest.questions || currentQuest.questions.length <= 1,
+  });
+
+  useEffect(() => {
+    let questions = currentQuest.questions || questionsData;
+    if (questions) {
+      setSession({
+        ...currentQuest,
+        questions,
+      });
+      setCurrentQuestion(questions[currentQuestionIndex]);
+    }
+  }, [questionsData]);
 
   const updateAnswerMutation = useMutation({
     mutationFn: async (params: PictureQuestAnswerUpdate) =>
@@ -89,7 +88,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     if (!answer) return;
 
     await updateAnswerMutation.mutateAsync({
-      question_id: currentQuestion.id,
+      question_id: currentQuestion?.id!,
       answer,
     });
 
@@ -120,8 +119,12 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   }
 
   useEffect(() => {
+    if (!currentQuest.questions) return;
     setCurrentQuestion(currentQuest.questions![currentQuestionIndex]);
   }, [currentQuestionIndex]);
+
+  if (isError) return <p>Something went wrong. Try again?</p>;
+  if (isLoadingQuestions) return <p>Loading...</p>;
 
   return (
     <div className="w-2/3 mx-auto px-8 flex flex-col gap-8">
@@ -137,7 +140,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
       />
 
       <h3 className={subtitle({ class: "text-left" })}>
-        {currentQuestion.title}
+        {currentQuestion?.title}
       </h3>
 
       <form onSubmit={handleSubmission} className="flex flex-col gap-6">

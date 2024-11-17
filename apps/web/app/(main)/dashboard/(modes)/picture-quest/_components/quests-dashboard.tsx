@@ -78,7 +78,7 @@ export default async function PictureQuestsDashboard({
       <div className="gap-x-4 gap-y-8 grid grid-cols-1 md:grid-cols-3 place-items-center">
         {previousQuests?.map((quest) => (
           <Card
-            // onClick={() => setSession(quest)}
+            onClick={() => setSession(quest)}
             key={quest.id}
             isPressable
             isFooterBlurred
