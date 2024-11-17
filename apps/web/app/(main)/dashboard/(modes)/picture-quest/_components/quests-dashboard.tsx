@@ -18,6 +18,7 @@ import { useAtom } from "jotai";
 import { useDisclosure } from "@nextui-org/modal";
 import { useState } from "react";
 import PlayModal from "./modal";
+import Spinner from "@/components/spinner";
 
 export default async function PictureQuestsDashboard({
   accessToken,
@@ -53,6 +54,7 @@ export default async function PictureQuestsDashboard({
   }
 
   if (isError) return <p>Something went wrong. Try again?</p>;
+  if (isLoading) return <Spinner />;
 
   return (
     <div className="w-full px-8 flex flex-col gap-8">
@@ -96,6 +98,7 @@ export default async function PictureQuestsDashboard({
               <p className="text-medium text-center text-white/80">
                 {quest.title}
               </p>
+              <div />
             </CardFooter>
           </Card>
         ))}

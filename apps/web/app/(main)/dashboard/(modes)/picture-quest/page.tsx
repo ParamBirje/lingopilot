@@ -1,10 +1,11 @@
 "use client";
 
 import { pictureQuestAtom } from "@/components/atoms";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import PictureQuestsDashboard from "./_components/quests-dashboard";
 import QuestPlay from "./_components/quest-play";
 import { useUser } from "@stackframe/stack";
+import QuestResults from "./_components/quest-results";
 
 export default async function Page() {
   const session = useAtomValue(pictureQuestAtom);
@@ -15,7 +16,7 @@ export default async function Page() {
   if (!session) {
     return <PictureQuestsDashboard accessToken={accessToken!} />;
   } else if (session.ended) {
-    return <p>Session ended</p>;
+    return <QuestResults accessToken={accessToken!} />;
   } else {
     return <QuestPlay accessToken={accessToken!} />;
   }

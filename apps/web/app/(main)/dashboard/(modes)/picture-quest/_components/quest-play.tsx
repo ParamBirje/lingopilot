@@ -17,8 +17,10 @@ import {
   createQuestions,
   getQuestions,
   updateAnswer,
+  verifyAnswers,
 } from "@/services/api/modes/picture-quest";
 import { endSession } from "@/services/api/modes/session";
+import Spinner from "@/components/spinner";
 
 export default function QuestPlay({ accessToken }: { accessToken: string }) {
   const [session, setSession] = useAtom(pictureQuestAtom);
@@ -70,17 +72,21 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     },
   });
 
-  const createQuestionsMutation = useMutation({
-    mutationFn: async (params: PictureQuestQuestionCreate) =>
-      await createQuestions(accessToken, params),
-    onSuccess: (data: PictureQuestQuestion[]) => {
-      setSession({
-        ...currentQuest,
-        questions: currentQuest.questions?.concat(data),
-      });
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setCurrentQuestion(data[0]);
-    },
+  // const createQuestionsMutation = useMutation({
+  //   mutationFn: async (params: PictureQuestQuestionCreate) =>
+  //     await createQuestions(accessToken, params),
+  //   onSuccess: (data: PictureQuestQuestion[]) => {
+  //     setSession({
+  //       ...currentQuest,
+  //       questions: currentQuest.questions?.concat(data),
+  //     });
+  //     setCurrentQuestionIndex(currentQuestionIndex + 1);
+  //     setCurrentQuestion(data[0]);
+  //   },
+  // });
+
+  const verifyAnswersMutation = useMutation({
+    mutationFn: async () => await verifyAnswers(accessToken, currentQuest.id),
   });
 
   async function handleSubmission(e: React.FormEvent<HTMLFormElement>) {
@@ -92,6 +98,8 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
       answer,
     });
 
+    verifyAnswersMutation.mutate();
+
     let didGo = goToNextQuestion();
     if (didGo) return;
 
@@ -100,8 +108,6 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     //   session_id: currentQuest.id,
     //   num_questions: 1,
     // });
-
-    // async send the answer for checking
   }
 
   function goToNextQuestion() {
@@ -124,7 +130,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   }, [currentQuestionIndex]);
 
   if (isError) return <p>Something went wrong. Try again?</p>;
-  if (isLoadingQuestions) return <p>Loading...</p>;
+  if (isLoadingQuestions) return <Spinner />;
 
   return (
     <div className="w-2/3 mx-auto px-8 flex flex-col gap-8">
@@ -145,6 +151,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
 
       <form onSubmit={handleSubmission} className="flex flex-col gap-6">
         <Textarea
+          autoFocus
           label="Answer"
           size="lg"
           placeholder="Enter your response here"
@@ -152,8 +159,9 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
           value={answer}
           onValueChange={setAnswer}
           disabled={
-            updateAnswerMutation.isPending || createQuestionsMutation.isPending
+            updateAnswerMutation.isPending || endSessionMutation.isPending
           }
+          description="Avoid one word answers. Be descriptive."
         />
 
         <Button
@@ -162,7 +170,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
           size="lg"
           type="submit"
           isLoading={
-            updateAnswerMutation.isPending || createQuestionsMutation.isPending
+            updateAnswerMutation.isPending || endSessionMutation.isPending
           }
           endContent={<ArrowRightIcon size={16} />}
         >

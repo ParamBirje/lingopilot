@@ -119,3 +119,24 @@ export async function getQuestions(
     throw error;
   }
 }
+
+export async function verifyAnswers(
+  access_token: string,
+  session_id: number,
+): Promise<PictureQuestQuestion[]> {
+  try {
+    const response = await fetch(`${domain}/api/modes/picture-quest/verify`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "x-stack-access-token": access_token,
+      },
+      body: JSON.stringify({ session_id }),
+    });
+    const jsonData = await response.json();
+    return jsonData;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

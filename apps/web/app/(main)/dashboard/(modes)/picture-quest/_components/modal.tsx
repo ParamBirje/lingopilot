@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
 } from "@nextui-org/modal";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
+import FakeProgressBar from "@/components/fake-progress-bar";
 
 const sampleTopics = [
   "Nature",
@@ -70,9 +72,22 @@ export default function PlayModal({
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              {isButtonLoading && (
+                <FakeProgressBar
+                  className="w-1/2 place-self-center h-full"
+                  size="sm"
+                />
+              )}
+
+              <Button
+                disabled={isButtonLoading}
+                color="danger"
+                variant="light"
+                onPress={onClose}
+              >
                 Close
               </Button>
+
               <Button
                 color="primary"
                 onPress={onSuccess}
