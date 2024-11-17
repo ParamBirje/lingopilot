@@ -61,6 +61,7 @@ export type PictureQuestSession = {
   id: number;
   image: string;
   title: string;
+  ended: boolean | null;
   questions?: PictureQuestQuestion[];
 };
 

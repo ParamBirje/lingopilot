@@ -14,6 +14,8 @@ export default async function Page() {
 
   if (!session) {
     return <PictureQuestsDashboard accessToken={accessToken!} />;
+  } else if (session.ended) {
+    return <p>Session ended</p>;
   } else {
     return <QuestPlay accessToken={accessToken!} />;
   }

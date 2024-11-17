@@ -10,6 +10,7 @@ import {
   PictureQuestAnswerUpdate,
   PictureQuestQuestion,
   PictureQuestQuestionCreate,
+  PictureQuestSession,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -17,6 +18,7 @@ import {
   getQuestions,
   updateAnswer,
 } from "@/services/api/modes/picture-quest";
+import { endSession } from "@/services/api/modes/session";
 
 export default function QuestPlay({ accessToken }: { accessToken: string }) {
   const [session, setSession] = useAtom(pictureQuestAtom);
@@ -62,11 +64,17 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     },
   });
 
+  const endSessionMutation = useMutation({
+    mutationFn: async () => await endSession(accessToken, currentQuest.id),
+    onSuccess: (data: PictureQuestSession) => {
+      setSession((prev) => ({ ...prev, ...data }));
+    },
+  });
+
   const createQuestionsMutation = useMutation({
     mutationFn: async (params: PictureQuestQuestionCreate) =>
       await createQuestions(accessToken, params),
     onSuccess: (data: PictureQuestQuestion[]) => {
-      console.log("success", currentQuest.questions?.concat(data));
       setSession({
         ...currentQuest,
         questions: currentQuest.questions?.concat(data),
@@ -80,7 +88,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     e.preventDefault();
     if (!answer) return;
 
-    updateAnswerMutation.mutate({
+    await updateAnswerMutation.mutateAsync({
       question_id: currentQuestion.id,
       answer,
     });
@@ -88,23 +96,26 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     let didGo = goToNextQuestion();
     if (didGo) return;
 
-    createQuestionsMutation.mutate({
-      session_id: currentQuest.id,
-      num_questions: 1,
-    });
+    // DISCONTINUED: for now
+    // createQuestionsMutation.mutate({
+    //   session_id: currentQuest.id,
+    //   num_questions: 1,
+    // });
 
     // async send the answer for checking
   }
 
   function goToNextQuestion() {
-    setAnswer("");
     if (
       currentQuest.questions &&
       currentQuest.questions.length > currentQuestionIndex + 1
     ) {
+      setAnswer("");
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       return true;
     }
+
+    endSessionMutation.mutate();
     return false;
   }
 

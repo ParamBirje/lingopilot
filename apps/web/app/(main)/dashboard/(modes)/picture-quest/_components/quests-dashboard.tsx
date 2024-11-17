@@ -15,16 +15,9 @@ import {
 import { PictureQuestSession, PictureQuestSessionCreate } from "@/types";
 import { pictureQuestAtom } from "@/components/atoms";
 import { useAtom } from "jotai";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/modal";
-import { Input } from "@nextui-org/input";
+import { useDisclosure } from "@nextui-org/modal";
 import { useState } from "react";
+import PlayModal from "./modal";
 
 export default async function PictureQuestsDashboard({
   accessToken,
@@ -33,6 +26,7 @@ export default async function PictureQuestsDashboard({
 }) {
   const [session, setSession] = useAtom(pictureQuestAtom);
   const [topic, setTopic] = useState<string>("");
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const {
     data: previousQuests,
@@ -53,22 +47,10 @@ export default async function PictureQuestsDashboard({
     },
   });
 
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
   function handleSessionCreate() {
+    if (!topic) return;
     createSession.mutate({ topic: topic });
   }
-
-  const sampleTopics = [
-    "Nature",
-    "Music",
-    "Art",
-    "Food",
-    "Travel",
-    "Sports",
-    "Technology",
-    "Batman",
-  ];
 
   if (isError) return <p>Something went wrong. Try again?</p>;
 
@@ -120,55 +102,14 @@ export default async function PictureQuestsDashboard({
       </div>
 
       {/* Modal */}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Personalize your quest
-              </ModalHeader>
-              <ModalBody>
-                <Input
-                  type="text"
-                  label="Topic here"
-                  value={topic}
-                  onValueChange={setTopic}
-                />
-
-                <p className="text-default-500 text-sm mt-2">Quick Start:</p>
-
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {sampleTopics.map((topic) => (
-                    <Button
-                      key={topic}
-                      color="default"
-                      radius="full"
-                      size="sm"
-                      onClick={() => setTopic(topic)}
-                    >
-                      {topic}
-                    </Button>
-                  ))}
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    handleSessionCreate();
-                  }}
-                  isLoading={createSession.isPending}
-                >
-                  Let&apos;s go!
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <PlayModal
+        topic={topic}
+        setTopic={setTopic}
+        onSuccess={handleSessionCreate}
+        isButtonLoading={createSession.isPending}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
     </div>
   );
 }
