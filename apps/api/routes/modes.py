@@ -51,6 +51,28 @@ async def get_sessions(request: Request, mode: str):
     return JSONResponse(content=response.data, status_code=200)
 
 
+class EndSessionBodyParams(BaseModel):
+    session_id: int
+
+
+@router.patch("/sessions", dependencies=[Depends(authenticate_user)])
+async def end_session(body: EndSessionBodyParams):
+    """
+    End a session
+    """
+    response = (
+        supabase.table("sessions")
+        .update({"ended": True})
+        .eq("id", body.session_id)
+        .execute()
+    )
+
+    return JSONResponse(
+        content=response.data[0],
+        status_code=200,
+    )
+
+
 class CharacterConvoCreateBody(BaseModel):
     difficulty: str
     language: str
@@ -131,7 +153,7 @@ async def picture_quest(request: Request, body: PictureQuestCreateBody):
     keywords = keywords_title_json["keywords"]
     title = keywords_title_json["title"]
 
-    num_questions = 1
+    num_questions = random.randint(4, 6)
     questions = await retrieve_image_questions(keywords, num_questions)
 
     session_response = (
