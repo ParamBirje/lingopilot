@@ -80,11 +80,11 @@ export default function VoiceChat() {
     mediaSource.addEventListener("sourceopen", async () => {
       const sourceBuffer = mediaSource.addSourceBuffer("audio/mpeg");
 
-      // Error handling for SourceBuffer
       sourceBuffer.addEventListener("error", (error) => {
         console.error("SourceBuffer error:", error);
       });
 
+      // TODO: add character meta to prompt
       const response = await getVoiceResponse(
         inputText,
         userFromLang,
@@ -117,7 +117,6 @@ export default function VoiceChat() {
         sourceBuffer.appendBuffer(value);
       }
 
-      // Listen for when the source buffer has finished appending
       sourceBuffer.addEventListener("updateend", () => {
         isAppending = false;
 
@@ -182,9 +181,9 @@ export default function VoiceChat() {
 
       <div className="my-auto h-full w-full flex flex-col justify-center items-center gap-10">
         <Image
-          className="z-10 rounded-xl bg-white mx-auto w-3/4 md:w-2/3 aspect-video object-cover"
+          className="z-10 rounded-full bg-white mx-auto w-3/4 md:w-1/3 aspect-square object-cover"
           src={
-            session?.image ||
+            session?.character?.image ||
             "https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg"
           }
           alt="placeholder"

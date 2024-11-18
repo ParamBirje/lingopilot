@@ -17,6 +17,8 @@ import { createCharacterConvoSession } from "@/services/api/modes/character-conv
 import { DicesIcon } from "lucide-react";
 import { useAtom } from "jotai";
 import { sessionAtom } from "@/components/atoms";
+import Spinner from "@/components/spinner";
+import { useUser } from "@stackframe/stack";
 
 export default async function CharacterSelector({
   accessToken,
@@ -24,6 +26,7 @@ export default async function CharacterSelector({
   accessToken: string;
 }) {
   const [session, setSession] = useAtom(sessionAtom);
+  const user = useUser({ or: "redirect" });
 
   const {
     data: characters,
@@ -43,11 +46,12 @@ export default async function CharacterSelector({
   });
 
   const handleRoll = () => {
-    // TODO: take this from user settings
-    createSession.mutate({
-      language: "English",
-      difficulty: "Super Easy",
-    });
+    const payload = {
+      language: user.clientMetadata?.onboardingData?.toLang.key || "en-US",
+      difficulty:
+        user.clientMetadata?.onboardingData?.difficulty.name || "Super Easy",
+    };
+    createSession.mutate(payload);
   };
 
   const handleLetsGo = () => {
@@ -56,6 +60,7 @@ export default async function CharacterSelector({
   };
 
   if (isError) return <p>Something went wrong. Try again?</p>;
+  if (isLoading) return <Spinner />;
 
   return (
     <div className="flex flex-col items-center gap-10">
@@ -67,8 +72,8 @@ export default async function CharacterSelector({
         </p>
       </div>
 
-      <div className="relative">
-        <Marquee className={`[--duration:10s]`}>
+      <div className="relative w-full">
+        <Marquee className={`[--duration:15s]`}>
           {characters?.map((character: Character) => (
             <Card className="w-[230px]" key={character.id}>
               <CardHeader className="flex items-center gap-3">
