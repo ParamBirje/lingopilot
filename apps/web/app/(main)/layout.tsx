@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           className="flex items-center gap-1 text-current"
           href="https://parameater.co/"
         >
-          <span className="text-default-600">Built with love</span>
+          <span className="text-default-600">Built with ❤️ by</span>
           <p className="text-primary">Param Birje</p>
         </Link>
       </footer>

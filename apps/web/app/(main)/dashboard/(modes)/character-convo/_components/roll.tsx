@@ -64,9 +64,12 @@ export default async function RollCharacter() {
               </small>
             </CardHeader>
             <CardBody className="overflow-visible py-2 pb-0 flex flex-col gap-3">
-              <p className="text-default-500 text-sm">
-                Alice is waiting for the bus to go to home. Start by asking her
-                about her day.
+              <p className="text-default-500 text-sm normal-case">
+                You came across{" "}
+                <i>
+                  {session.character.name} {session.character.description}.
+                </i>{" "}
+                Start a conversation with them!
               </p>
               <Image
                 alt="Card background"

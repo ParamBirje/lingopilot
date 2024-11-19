@@ -21,7 +21,7 @@ export default function VoiceChat() {
   const [session, setSession] = useAtom(sessionAtom);
   const router = useRouter();
   const user = useUser({ or: "redirect" });
-  const userFromLang = user.clientMetadata?.fromLang || "en-US";
+  const userToLang = user.clientMetadata?.toLang || "en-US";
 
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
@@ -89,7 +89,7 @@ export default function VoiceChat() {
 
       const response = await getVoiceResponse(
         inputText,
-        userFromLang,
+        userToLang,
         session?.character.voice_name!,
         session?.character.voice_engine!,
         session?.session_id!,

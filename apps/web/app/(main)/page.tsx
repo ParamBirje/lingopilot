@@ -15,10 +15,10 @@ export default function Home() {
         <span className={title()}>The&nbsp;</span>
         <span className={title({ color: "violet" })}>copilot&nbsp;</span>
         <br />
-        <span className={title()}>that supercharges language learning.</span>
+        <span className={title()}>to supercharge your language learning.</span>
         <div className={subtitle({ class: "mt-6" })}>
-          A fully interactive voice-enabled A.I language speaking assistant that
-          refines & tones your language skills.
+          An interactive voice-enabled A.I assistant that hones your language
+          through speaking and comprehensive input.
         </div>
       </div>
 
@@ -35,14 +35,14 @@ export default function Home() {
         >
           Get Started
         </Button>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
+        {/* <Link */}
+        {/*   isExternal */}
+        {/*   className={buttonStyles({ variant: "bordered", radius: "full" })} */}
+        {/*   href={siteConfig.links.github} */}
+        {/* > */}
+        {/*   <GithubIcon size={20} /> */}
+        {/*   GitHub */}
+        {/* </Link> */}
       </div>
     </section>
   );
