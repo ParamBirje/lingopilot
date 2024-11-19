@@ -4,6 +4,10 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+export type AccessToken = {
+  access_token: string;
+};
+
 export type Language = {
   id: number;
   type?: string;
@@ -36,6 +40,11 @@ export type Character = {
   voice_engine: string;
 };
 
+export type ConversationMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
 // Modes
 
 export type Mode = "CHARACTER_CONVO" | "PICTURE_QUEST";
@@ -43,7 +52,7 @@ export type Mode = "CHARACTER_CONVO" | "PICTURE_QUEST";
 export type CharacterConvoSessionCreate = {
   language: string;
   difficulty: string;
-};
+} & AccessToken;
 
 export type CharacterConvoSession = CharacterConvoSessionCreate & {
   character: Character;

@@ -14,6 +14,8 @@ import { MicIcon, MicOffIcon } from "lucide-react";
 import { sessionAtom } from "@/components/atoms";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
+import { getLatestAssistantMessage } from "@/services/api/modes/character-convo";
+import { WordFadeIn } from "@/components/ui/word-fade-in";
 
 export default function VoiceChat() {
   const [session, setSession] = useAtom(sessionAtom);
@@ -24,6 +26,7 @@ export default function VoiceChat() {
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
 
+  const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [autoMic, setAutoMic] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -144,6 +147,12 @@ export default function VoiceChat() {
 
     try {
       await audio.play();
+      let message = await getLatestAssistantMessage(
+        accessToken!,
+        session?.session_id!,
+      );
+      setAssistantMessage(message.content);
+
       audio.onended = () => {
         if (autoMic) {
           handleStartRecording();
@@ -219,6 +228,15 @@ export default function VoiceChat() {
             Mic not found / Browser doesn&apos;t support speech recognition.
           </p>
         )}
+
+        <WordFadeIn
+          key={assistantMessage}
+          delay={0.2}
+          className={subtitle({
+            class: "z-10 text-2xl lg:text-3xl text-center text-warning-500",
+          })}
+          words={assistantMessage}
+        />
 
         <p
           className={subtitle({
