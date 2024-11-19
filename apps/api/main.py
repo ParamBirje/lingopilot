@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .routes.ai import router as ai_router
+from .routes.character_convo import router as character_convo_router
 from .routes.characters import router as characters_router
 from .routes.modes import router as modes_router
 from .routes.picture_quest import router as picture_quest_router
@@ -28,6 +29,7 @@ app.include_router(modes_router)
 app.include_router(ai_router)
 app.include_router(characters_router)
 app.include_router(picture_quest_router)
+app.include_router(character_convo_router)
 
 
 @app.get("/healthz")
