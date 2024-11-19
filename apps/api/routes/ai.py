@@ -21,11 +21,17 @@ router = APIRouter(
 
 
 class VoiceBodyParams(BaseModel):
+    session_id: int
     text: str
+
+    language: str
     voice_name: str
     voice_engine: str
-    language: str
-    session_id: int
+
+    character: str
+    description: str
+    meta: str
+    relation: str
 
 
 @router.post("/voice")
@@ -45,11 +51,19 @@ async def get_voice_agent(body: VoiceBodyParams):
     start_time = time.perf_counter()
     print(f"Starting at: {time.time()}")
     llm_response = llm_client.chat.completions.create(
-        model=LLAMA_8,
+        model=LLAMA_70,
         messages=[
             {
                 "role": "system",
-                "content": "You will now roleplay as a friend of mine named Alice that I met right now at the bus stop. You will strictly keep the conversation going by strictly ending with a question back to me. Also you are secretly helping me speak properly, so if I make mistakes do correct me in a concise manner then continue the conversation.",
+                "content": f"""
+                    You will now roleplay as a {body.relation} of mine named {body.character} that I met right now {body.description}.
+                    Strictly in this language: {body.language}
+                    Some roleplay context: {body.meta}
+
+                    You will strictly keep the conversation going by strictly ending with a question back to me.
+                    Also you are secretly helping me speak properly, so only if I make huge mistakes do correct me in a concise manner then continue the conversation.
+                    Don't be too strict, if it sounds somewhat natural then it's good enough.
+                """,
             },
             *response.data,
             {"role": "user", "content": body.text},

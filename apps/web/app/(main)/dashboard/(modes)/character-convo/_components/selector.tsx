@@ -2,30 +2,17 @@
 
 import { subtitle, title } from "@/components/primitives";
 import { Marquee } from "@/components/ui/marquee";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
-import { Button } from "@nextui-org/button";
 import { Image } from "@nextui-org/image";
-import {
-  Character,
-  CharacterConvoSession,
-  CharacterConvoSessionCreate,
-} from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Character } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import { getCharacters } from "@/services/api/characters";
-import { createCharacterConvoSession } from "@/services/api/modes/character-convo";
-import { DicesIcon } from "lucide-react";
-import { useAtom } from "jotai";
-import { sessionAtom } from "@/components/atoms";
 import Spinner from "@/components/spinner";
+import RollCharacter from "./roll";
 import { useUser } from "@stackframe/stack";
 
-export default async function CharacterSelector({
-  accessToken,
-}: {
-  accessToken: string;
-}) {
-  const [session, setSession] = useAtom(sessionAtom);
+export default async function CharacterSelector() {
   const user = useUser({ or: "redirect" });
 
   const {
@@ -34,30 +21,11 @@ export default async function CharacterSelector({
     isError,
   } = useQuery({
     queryKey: ["characters"],
-    queryFn: async () => await getCharacters(accessToken),
-  });
-
-  const createSession = useMutation({
-    mutationFn: async (params: CharacterConvoSessionCreate) =>
-      await createCharacterConvoSession(accessToken, params),
-    onSuccess: (data: CharacterConvoSession) => {
-      setSession(data);
+    queryFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await getCharacters(accessToken!);
     },
   });
-
-  const handleRoll = () => {
-    const payload = {
-      language: user.clientMetadata?.onboardingData?.toLang.key || "en-US",
-      difficulty:
-        user.clientMetadata?.onboardingData?.difficulty.name || "Super Easy",
-    };
-    createSession.mutate(payload);
-  };
-
-  const handleLetsGo = () => {
-    if (!session) return;
-    setSession({ ...session, voice_chat_view: true });
-  };
 
   if (isError) return <p>Something went wrong. Try again?</p>;
   if (isLoading) return <Spinner />;
@@ -101,50 +69,7 @@ export default async function CharacterSelector({
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background" />
       </div>
 
-      <Button
-        className="w-fit"
-        color="primary"
-        onClick={handleRoll}
-        isLoading={createSession.isPending}
-        endContent={<DicesIcon />}
-        size="lg"
-      >
-        {createSession.isSuccess && "Re-"}Roll
-      </Button>
-
-      {createSession.isSuccess && session && (
-        <div className="h-full w-full flex justify-center items-center">
-          <Card className="max-w-sm">
-            <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
-              <p className="text-tiny uppercase font-bold">
-                {session.character.name}
-              </p>
-              <small className="text-default-500">
-                {session.character.description}
-              </small>
-            </CardHeader>
-            <CardBody className="overflow-visible py-2 pb-0 flex flex-col gap-3">
-              <p className="text-default-500 text-sm">
-                Alice is waiting for the bus to go to home. Start by asking her
-                about her day.
-              </p>
-              <Image
-                alt="Card background"
-                className="object-cover rounded-xl w-full aspect-video"
-                src={
-                  session.image ||
-                  "https://nextui.org/images/hero-card-complete.jpeg"
-                }
-              />
-            </CardBody>
-            <CardFooter className="flex justify-end">
-              <Button onClick={handleLetsGo} className="w-full" color="primary">
-                Let&apos;s go!
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-      )}
+      <RollCharacter />
     </div>
   );
 }

@@ -7,6 +7,11 @@ export const getVoiceResponse = async (
   voice_engine: string,
   session_id: number,
 
+  character: string,
+  description: string,
+  meta: string,
+  relation: string,
+
   accessToken: string,
 ): Promise<Response | null> => {
   try {
@@ -22,6 +27,10 @@ export const getVoiceResponse = async (
         voice_name,
         voice_engine,
         session_id,
+        character,
+        description,
+        meta,
+        relation,
       }),
     });
     return response;

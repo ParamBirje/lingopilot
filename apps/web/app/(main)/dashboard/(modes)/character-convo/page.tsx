@@ -8,13 +8,11 @@ import { useAtomValue } from "jotai";
 
 export default async function Page() {
   const session = useAtomValue(sessionAtom);
-
   const user = useUser({ or: "redirect" });
-  const { accessToken } = await user.getAuthJson();
 
   if (session?.voice_chat_view) {
     return <VoiceChat />;
   } else {
-    return <CharacterSelector accessToken={accessToken!} />;
+    return <CharacterSelector />;
   }
 }

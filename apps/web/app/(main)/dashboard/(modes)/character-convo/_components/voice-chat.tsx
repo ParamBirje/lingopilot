@@ -87,13 +87,16 @@ export default function VoiceChat() {
         console.error("SourceBuffer error:", error);
       });
 
-      // TODO: add character meta to prompt
       const response = await getVoiceResponse(
         inputText,
         userFromLang,
         session?.character.voice_name!,
         session?.character.voice_engine!,
         session?.session_id!,
+        session?.character.name!,
+        session?.character.description!,
+        session?.character.meta!,
+        session?.character.relation!,
         accessToken!,
       );
 
@@ -229,18 +232,30 @@ export default function VoiceChat() {
           </p>
         )}
 
-        <WordFadeIn
-          key={assistantMessage}
-          delay={0.2}
-          className={subtitle({
-            class: "z-10 text-2xl lg:text-3xl text-center text-warning-500",
-          })}
-          words={assistantMessage}
-        />
+        <div className="min-h-[200px] place-content-center">
+          {loading && (
+            <div className="z-10 flex justify-center items-center gap-3">
+              <div className="w-3 h-3 bg-warning-500 rounded-full animate-pulse" />
+              <div className="w-3 h-3 bg-warning-500 rounded-full animate-pulse" />
+              <div className="w-3 h-3 bg-warning-500 rounded-full animate-pulse" />
+            </div>
+          )}
+
+          {!loading && (
+            <WordFadeIn
+              key={assistantMessage}
+              delay={0.21}
+              className={subtitle({
+                class: "z-10 text-xl lg:text-3xl text-center text-warning-500",
+              })}
+              words={assistantMessage}
+            />
+          )}
+        </div>
 
         <p
           className={subtitle({
-            class: "z-10 text-2xl lg:text-3xl text-center",
+            class: "z-10 text-xl lg:text-3xl text-center",
           })}
         >
           <p>{transcript || "..."}</p>
