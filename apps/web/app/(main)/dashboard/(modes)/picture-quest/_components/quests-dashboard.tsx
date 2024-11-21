@@ -6,7 +6,7 @@ import { subtitle, title } from "@/components/primitives";
 import { useQuery } from "@tanstack/react-query";
 import { getPreviousQuests } from "@/services/api/modes/picture-quest";
 import { pictureQuestAtom } from "@/components/atoms";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import PlayModal from "./play-modal";
 import Spinner from "@/components/spinner";
 
@@ -15,7 +15,7 @@ export default async function PictureQuestsDashboard({
 }: {
   accessToken: string;
 }) {
-  const [session, setSession] = useAtom(pictureQuestAtom);
+  const setSession = useSetAtom(pictureQuestAtom);
 
   const {
     data: previousQuests,
@@ -30,7 +30,7 @@ export default async function PictureQuestsDashboard({
   if (isLoading) return <Spinner />;
 
   return (
-    <div className="w-full px-8 flex flex-col gap-8">
+    <div className="w-full px-4 flex flex-col gap-8">
       <div>
         <h1 className={title({ class: "text-left" })}>Picture Quest</h1>
         <p className={subtitle()}>
@@ -42,7 +42,7 @@ export default async function PictureQuestsDashboard({
 
       <h3 className={subtitle({ class: "text-left" })}>Previous Quests</h3>
 
-      <div className="gap-x-4 gap-y-8 grid grid-cols-1 md:grid-cols-3 place-items-center">
+      <div className="gap-x-4 gap-y-8 grid grid-cols-2 md:grid-cols-3 place-items-center">
         {previousQuests?.map((quest) => (
           <Card
             onClick={() => setSession(quest)}
@@ -50,7 +50,7 @@ export default async function PictureQuestsDashboard({
             isPressable
             isFooterBlurred
             radius="lg"
-            className="border-none w-[200px]"
+            className="border-none md:w-[200px]"
           >
             <Image
               alt="Woman listing to music"

@@ -32,7 +32,7 @@ export default function QuestResults({ accessToken }: { accessToken: string }) {
   if (!questionsData) return <p>No questions found.</p>;
 
   return (
-    <div className="w-full px-8 flex flex-col gap-8">
+    <div className="w-full px-4 flex flex-col gap-8">
       <div>
         <h1 className={title({ class: "text-left" })}>Results</h1>
       </div>

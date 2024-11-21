@@ -133,7 +133,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   if (isLoadingQuestions) return <Spinner />;
 
   return (
-    <div className="w-2/3 mx-auto px-8 flex flex-col gap-8">
+    <div className="w-full md:w-2/3 mx-auto px-4 flex flex-col gap-8">
       <div>
         <h1 className={title({ class: "text-left" })}>{currentQuest.title}</h1>
         <p className={subtitle()}>Picture Quest</p>

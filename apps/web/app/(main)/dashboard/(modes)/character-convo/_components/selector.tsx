@@ -31,8 +31,8 @@ export default async function CharacterSelector() {
   if (isLoading) return <Spinner />;
 
   return (
-    <div className="flex flex-col items-center gap-10">
-      <div className="text-center">
+    <div className="w-[100vw] px-4 flex flex-col md:items-center gap-10">
+      <div className="w-full md:text-center">
         <h1 className={title()}>Character Convo</h1>
         <p className={subtitle()}>
           Practice your conversational skills with different characters in

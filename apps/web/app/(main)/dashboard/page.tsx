@@ -1,3 +1,4 @@
+"use server";
 import { Card, CardHeader } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { title } from "@/components/primitives";
@@ -13,7 +14,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="w-full px-8 flex flex-col gap-8">
+    <div className="w-full px-4 flex flex-col gap-8">
       <h1 className={title({ class: "text-left" })}>Dashboard</h1>
 
       <div className="gap-2 grid grid-cols-12 grid-rows-2">

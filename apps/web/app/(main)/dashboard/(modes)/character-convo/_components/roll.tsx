@@ -40,7 +40,7 @@ export default async function RollCharacter() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="w-full flex flex-col md:items-center gap-10">
       <Button
         className="w-fit"
         color="primary"
@@ -53,8 +53,8 @@ export default async function RollCharacter() {
       </Button>
 
       {createSession.isSuccess && session && (
-        <div className="h-full w-full flex justify-center items-center">
-          <Card className="max-w-sm">
+        <div className="h-full w-full flex md:justify-center items-center">
+          <Card className="max-w-xs md:max-w-sm">
             <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
               <p className="text-tiny uppercase font-bold">
                 {session.character.name}

@@ -13,13 +13,11 @@ import { useUser } from "@stackframe/stack";
 import { MicIcon, MicOffIcon } from "lucide-react";
 import { sessionAtom } from "@/components/atoms";
 import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
 import { getLatestAssistantMessage } from "@/services/api/modes/character-convo";
 import { WordFadeIn } from "@/components/ui/word-fade-in";
 
 export default function VoiceChat() {
   const [session, setSession] = useAtom(sessionAtom);
-  const router = useRouter();
   const user = useUser({ or: "redirect" });
   const userToLang = user.clientMetadata?.toLang || "en-US";
 
@@ -193,7 +191,7 @@ export default function VoiceChat() {
 
       <div className="my-auto h-full w-full flex flex-col justify-center items-center gap-10">
         <Image
-          className="z-10 rounded-full bg-white mx-auto w-3/4 md:w-1/3 aspect-square object-cover"
+          className="z-10 rounded-full bg-white mx-auto w-1/2 md:w-1/3 aspect-square object-cover"
           src={
             session?.character?.image ||
             "https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg"
