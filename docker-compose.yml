@@ -1,0 +1,17 @@
+version: "3"
+services:
+  web:
+    build: ./apps/web
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/web/.env
+
+  api:
+    build: ./apps/api
+    ports:
+      - "8000:80"
+    volumes:
+      - ./apps/api:/app
+    env_file:
+      - ./apps/api/.env
