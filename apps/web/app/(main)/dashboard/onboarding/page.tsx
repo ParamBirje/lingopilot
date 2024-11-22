@@ -19,7 +19,7 @@ export default async function Page() {
   let difficulty = await getAvailableDifficulty();
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 items-center">
       <h1 className={title()}>Onboarding</h1>
 
       <LanguageSetup fromLang={fromLang} toLang={toLang} />

@@ -18,6 +18,7 @@ import FakeProgressBar from "@/components/fake-progress-bar";
 import { PlayIcon } from "lucide-react";
 import { useAtom } from "jotai";
 import { pictureQuestAtom } from "@/components/atoms";
+import { useUser } from "@stackframe/stack";
 
 const sampleTopics = [
   "Nature",
@@ -31,19 +32,20 @@ const sampleTopics = [
 ];
 
 export default function PlayModal({
-  accessToken,
   label = "Start Quest",
 }: {
-  accessToken: string;
   label?: string;
 }) {
+  const user = useUser({ or: "redirect" });
   const [session, setSession] = useAtom(pictureQuestAtom);
   const [topic, setTopic] = React.useState<string>("");
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const createSession = useMutation({
-    mutationFn: async (params: PictureQuestSessionCreate) =>
-      await createPictureQuestSession(accessToken, params),
+    mutationFn: async (params: PictureQuestSessionCreate) => {
+      const { accessToken } = await user.getAuthJson();
+      return await await createPictureQuestSession(accessToken!, params);
+    },
     onSuccess: (data: PictureQuestSession) => {
       setSession(data);
       setTopic("");

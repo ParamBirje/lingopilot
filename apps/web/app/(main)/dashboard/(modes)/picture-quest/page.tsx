@@ -14,7 +14,7 @@ export default async function Page() {
   const { accessToken } = await user.getAuthJson();
 
   if (!session) {
-    return <PictureQuestsDashboard accessToken={accessToken!} />;
+    return <PictureQuestsDashboard />;
   } else if (session.ended) {
     return <QuestResults accessToken={accessToken!} />;
   } else {

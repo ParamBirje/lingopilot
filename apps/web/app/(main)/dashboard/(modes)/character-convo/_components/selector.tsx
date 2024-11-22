@@ -31,8 +31,8 @@ export default async function CharacterSelector() {
   if (isLoading) return <Spinner />;
 
   return (
-    <div className="w-[100vw] px-4 flex flex-col md:items-center gap-10">
-      <div className="w-full md:text-center">
+    <div className="max-w-full px-4 flex flex-col items-center gap-10">
+      <div className="w-full text-center">
         <h1 className={title()}>Character Convo</h1>
         <p className={subtitle()}>
           Practice your conversational skills with different characters in
@@ -41,7 +41,7 @@ export default async function CharacterSelector() {
       </div>
 
       <div className="relative w-full">
-        <Marquee className={`[--duration:15s]`}>
+        <Marquee className={`[--duration:15s] w-full`}>
           {characters?.map((character: Character) => (
             <Card className="w-[230px]" key={character.id}>
               <CardHeader className="flex items-center gap-3">

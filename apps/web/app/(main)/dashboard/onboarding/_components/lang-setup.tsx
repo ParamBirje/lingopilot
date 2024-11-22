@@ -20,7 +20,7 @@ export default function LanguageSetup({
   const setOnboarding = useSetAtom(onboardingAtom);
 
   return (
-    <Card className="max-w-xl">
+    <Card className="w-full md:w-1/2">
       <CardHeader className="flex gap-3">
         <Button disabled isIconOnly color="danger">
           <LanguagesIcon />

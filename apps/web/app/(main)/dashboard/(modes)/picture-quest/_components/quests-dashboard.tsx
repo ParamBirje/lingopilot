@@ -9,12 +9,10 @@ import { pictureQuestAtom } from "@/components/atoms";
 import { useSetAtom } from "jotai";
 import PlayModal from "./play-modal";
 import Spinner from "@/components/spinner";
+import { useUser } from "@stackframe/stack";
 
-export default async function PictureQuestsDashboard({
-  accessToken,
-}: {
-  accessToken: string;
-}) {
+export default async function PictureQuestsDashboard() {
+  const user = useUser({ or: "redirect" });
   const setSession = useSetAtom(pictureQuestAtom);
 
   const {
@@ -23,7 +21,10 @@ export default async function PictureQuestsDashboard({
     isError,
   } = useQuery({
     queryKey: ["previous-quests"],
-    queryFn: async () => await getPreviousQuests(accessToken),
+    queryFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await getPreviousQuests(accessToken!);
+    },
   });
 
   if (isError) return <p>Something went wrong. Try again?</p>;
@@ -38,11 +39,11 @@ export default async function PictureQuestsDashboard({
         </p>
       </div>
 
-      <PlayModal accessToken={accessToken} />
+      <PlayModal />
 
       <h3 className={subtitle({ class: "text-left" })}>Previous Quests</h3>
 
-      <div className="gap-x-4 gap-y-8 grid grid-cols-2 md:grid-cols-3 place-items-center">
+      <div className="gap-x-4 gap-y-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {previousQuests?.map((quest) => (
           <Card
             onClick={() => setSession(quest)}

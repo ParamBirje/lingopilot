@@ -19,6 +19,7 @@ export default function DifficultySetup({
   difficulty: Difficulty[];
 }) {
   const [onboarding, setOnboarding] = useAtom(onboardingAtom);
+  const [loading, setLoading] = React.useState(false);
   const user = useUser({ or: "redirect" });
   const router = useRouter();
 
@@ -28,6 +29,7 @@ export default function DifficultySetup({
     if (!onboarding?.toLang) return;
     if (!onboarding?.difficulty) return;
 
+    setLoading(true);
     await user.update({
       clientMetadata: {
         onboardingData: onboarding,
@@ -35,10 +37,11 @@ export default function DifficultySetup({
       },
     });
     router.push(siteConfig.links.dashboard);
+    setLoading(false);
   }
 
   return (
-    <Card className="max-w-xl">
+    <Card className="w-full md:w-1/2">
       <CardHeader className="flex gap-3">
         <Button disabled isIconOnly color="warning">
           <GaugeIcon />
@@ -75,7 +78,13 @@ export default function DifficultySetup({
       </CardBody>
       <Divider />
       <CardFooter className="flex justify-end">
-        <Button onClick={handleSave} color="primary" variant="solid">
+        <Button
+          isDisabled={loading}
+          isLoading={loading}
+          onClick={handleSave}
+          color="primary"
+          variant="solid"
+        >
           Save
         </Button>
       </CardFooter>
