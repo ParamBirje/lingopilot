@@ -1,5 +1,13 @@
-# LingoPilot
-_your language learning copilot_
+<!-- PROJECT LOGO -->
+<p align="center">
+   <img src="https://github.com/ParamBirje/lingopilot/assets/87022870/bbf5a268-e7a5-43ea-bfce-0b1564cfb22c.png" alt="Logo">
+
+  <h2 align="center">LingoPilot</h2>
+
+  <p align="center">
+    Supercharge your language learning journey!
+  </p>
+</p>
 
 ## About the Project
 
