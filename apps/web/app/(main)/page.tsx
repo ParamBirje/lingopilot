@@ -54,7 +54,7 @@ export default function Home() {
       <HeroVideoDialog
         className="aspect-video w-full mt-12 border-none"
         videoSrc="https://www.youtube.com/embed/7lzxWziZY9I?si=5mjaTBp5iQoKjVh_"
-        thumbnailSrc="https://images.pexels.com/photos/725255/pexels-photo-725255.jpeg?cs=srgb&dl=pexels-ninauhlikova-725255.jpg&fm=jpg&w=1280&h=960"
+        thumbnailSrc="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/149/560/datas/gallery.jpg"
       />
 
       <Particles
