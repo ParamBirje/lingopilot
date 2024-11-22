@@ -6,12 +6,6 @@ export const siteConfig = {
     "Your AI language learning copilot that supercharges your language learning journey through comprehensive input-based learning and speaking practice.",
   navItems: [
     {
-      label: "Home",
-      href: "/",
-    },
-
-    // TEST:ING
-    {
       label: "Dashboard",
       href: "/dashboard",
     },
@@ -59,10 +53,8 @@ export const siteConfig = {
       href: "/logout",
     },
   ],
-  links: {
-    github: "https://github.com/nextui-org/nextui",
-    twitter: "https://twitter.com/getnextui",
 
+  links: {
     signin: "/handler/sign-in",
     signup: "/handler/sign-up",
     dashboard: "/dashboard",

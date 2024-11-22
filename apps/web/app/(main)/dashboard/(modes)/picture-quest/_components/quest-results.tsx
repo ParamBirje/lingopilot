@@ -63,7 +63,7 @@ export default function QuestResults({ accessToken }: { accessToken: string }) {
       </Card>
 
       <div className="mt-4 flex items-center gap-4">
-        <PlayModal label="New Quest" accessToken={accessToken} />
+        <PlayModal label="New Quest" />
         <Button
           variant="bordered"
           size="lg"
