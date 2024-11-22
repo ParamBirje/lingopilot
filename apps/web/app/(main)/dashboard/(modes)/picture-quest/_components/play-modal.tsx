@@ -44,7 +44,7 @@ export default function PlayModal({
   const createSession = useMutation({
     mutationFn: async (params: PictureQuestSessionCreate) => {
       const { accessToken } = await user.getAuthJson();
-      return await await createPictureQuestSession(accessToken!, params);
+      return await createPictureQuestSession(accessToken!, params);
     },
     onSuccess: (data: PictureQuestSession) => {
       setSession(data);
@@ -55,7 +55,9 @@ export default function PlayModal({
 
   function handleSessionCreate() {
     if (!topic) return;
-    createSession.mutate({ topic: topic });
+
+    let cleanedTopic = topic.replace(/[^\w\s]/gi, "");
+    createSession.mutate({ topic: cleanedTopic });
   }
 
   return (
