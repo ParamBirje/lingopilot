@@ -12,7 +12,7 @@ from ..util.db import supabase
 router = APIRouter(prefix="/characters")
 
 
-@router.get("/", dependencies=[Depends(authenticate_user)])
+@router.get("", dependencies=[Depends(authenticate_user)])
 async def get_characters():
     """
     Get all character convo characters

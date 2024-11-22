@@ -13,15 +13,21 @@ from starlette.requests import Request
 
 from ..helpers.picture_quest_session import retrieve_image_questions
 from ..middleware.auth import authenticate_user, get_user_id
-from ..util.ai import (LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70,
-                       LLAMA_VISION_11, llm_client)
+from ..util.ai import (
+    LLAMA_2_1,
+    LLAMA_2_3,
+    LLAMA_8,
+    LLAMA_70,
+    LLAMA_VISION_11,
+    llm_client,
+)
 from ..util.db import supabase
 from ..util.pexels import get_pexels_image
 
 router = APIRouter(prefix="/modes")
 
 
-@router.get("/")
+@router.get("")
 async def get_modes():
     """
     Get all modes
