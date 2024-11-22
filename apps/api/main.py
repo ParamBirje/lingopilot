@@ -11,6 +11,7 @@ from .routes.user import router as user_router
 app = FastAPI(
     root_path="/api",
     title="LingoPilot API",
+    redirect_slashes=False,
 )
 
 # CORS
