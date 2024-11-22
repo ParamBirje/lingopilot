@@ -52,6 +52,8 @@ export default async function RollCharacter() {
         {createSession.isSuccess && "Re-"}Roll
       </Button>
 
+      {createSession.isError && <p>Something went wrong. Try again?</p>}
+
       {createSession.isSuccess && session && (
         <div className="h-full w-full flex justify-center items-center">
           <Card className="max-w-xs md:max-w-sm">

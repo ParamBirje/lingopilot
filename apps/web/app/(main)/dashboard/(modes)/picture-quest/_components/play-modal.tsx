@@ -16,7 +16,7 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import FakeProgressBar from "@/components/fake-progress-bar";
 import { PlayIcon } from "lucide-react";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { pictureQuestAtom } from "@/components/atoms";
 import { useUser } from "@stackframe/stack";
 
@@ -37,7 +37,7 @@ export default function PlayModal({
   label?: string;
 }) {
   const user = useUser({ or: "redirect" });
-  const [session, setSession] = useAtom(pictureQuestAtom);
+  const setSession = useSetAtom(pictureQuestAtom);
   const [topic, setTopic] = React.useState<string>("");
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -107,6 +107,12 @@ export default function PlayModal({
                     </Button>
                   ))}
                 </div>
+
+                {createSession.isError && (
+                  <p className="text-danger text-sm mt-2">
+                    Something went wrong. Try with a different topic?
+                  </p>
+                )}
               </ModalBody>
               <ModalFooter>
                 {createSession.isPending && (

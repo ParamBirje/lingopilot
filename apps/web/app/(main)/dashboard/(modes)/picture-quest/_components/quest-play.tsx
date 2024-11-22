@@ -161,6 +161,11 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
           disabled={
             updateAnswerMutation.isPending || endSessionMutation.isPending
           }
+          errorMessage={
+            updateAnswerMutation.isError
+              ? "Something went wrong when submitting your answer. Try again."
+              : undefined
+          }
           description="Avoid one word answers. Be descriptive."
         />
 
@@ -183,7 +188,10 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
             }
             endContent={<ArrowRightIcon size={16} />}
           >
-            Next
+            {currentQuest.questions &&
+            currentQuest.questions.length === currentQuestionIndex + 1
+              ? "Finish"
+              : "Next"}
           </Button>
         </div>
       </form>
