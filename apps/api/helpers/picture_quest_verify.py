@@ -23,8 +23,8 @@ async def verify_image_questions(questions: list[dict]):
                     to the question about the image. You are only checking the grammar and spelling of the answer.
 
                     Let the user write and describe in their own way.
-                    Don't be too strict. If the answer is how a normal person would say it, then it's correct.
-                    You will allow opinions and descriptions and all types of answers, just check the grammar and spelling.
+                    Don't be strict. You are the most lenient teacher ever. Allow users to write their own descriptions and opinions.
+                    You will allow all types of answers, you will strictly just check the grammar and spelling.
                 """,
             },
             {
@@ -42,10 +42,13 @@ async def verify_image_questions(questions: list[dict]):
                         "reason": "Reason here"
                     }}
 
-                    If the Answer is wrong then you will provide expected_answer where you will rewrite the correct answer and
+                    If the Answer has wrong grammar or is totally irrelevant to the image
+                    then you will provide expected_answer where you will rewrite the correct answer and
                     also provide the reason why it is correct.
 
                     If the answer is already correct, then you will strictly return null for both.
+                    
+                    I only want the json, no other information. Just the json object.
 
                     Question: {question["title"]}
                     Answer: {question["answer"]}
@@ -87,14 +90,14 @@ async def verify_image_questions(questions: list[dict]):
                     I want you to go through the verification_description of each question and extract the information
                     for expected_answer and reason. Don't write me any function, YOU will do it yourself.
 
-                    The expected_answer should not be one word, it should be a sentence. It should feel like it is a
-                    rewrite of the "answer" but with correct grammar and spelling. The reason should be a concise explanation
-                    of why the expected_answer is correct.
-
-                    Questions: {verified_questions}
-
                     Please: if the "answer" already has correct grammar and is a sentence, strictly ignore the verification_description and strictly return null 
                     for both expected_answer and reason.
+
+                    If the "answer" does not have correct grammar, then the expected_answer should not be one word, it should be a sentence.
+                    It should feel like it is a rewrite of the "answer" but with correct grammar and spelling.
+                    The reason should be a concise explanation of why the expected_answer is correct.
+
+                    Questions: {verified_questions}
 
                     Don't include verification_description in the response.
 
@@ -105,8 +108,8 @@ async def verify_image_questions(questions: list[dict]):
                                 "id": int,
                                 "title": "Title of the question",
                                 "answer": "Answer of the question",
-                                "expected_answer": "Expected answer",
-                                "reason": "Reason for the answer"
+                                "expected_answer": "Expected answer" | null,
+                                "reason": "Reason for the answer" | null
                             }}
                         ]
                     }}
