@@ -14,7 +14,7 @@ export default function FakeProgressBar({
   });
 
   React.useEffect(() => {
-    const intervalDelay = 4000;
+    const intervalDelay = 2500;
     const interval = setInterval(() => {
       const random = Math.floor(Math.random() * 10) + 1;
 

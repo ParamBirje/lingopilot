@@ -93,7 +93,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     e.preventDefault();
     if (!answer) return;
 
-    let cleanedAnswer = answer.replace(/[^\w\s]/gi, "");
+    let cleanedAnswer = answer.replace(/[<>"']/g, "");
     await updateAnswerMutation.mutateAsync({
       question_id: currentQuestion?.id!,
       answer: cleanedAnswer,

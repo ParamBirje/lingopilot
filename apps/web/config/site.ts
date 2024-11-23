@@ -6,7 +6,7 @@ export const siteConfig = {
     "Your AI language learning copilot that supercharges your language learning journey through comprehensive input-based learning and speaking practice.",
   navItems: [
     {
-      label: "Dashboard",
+      label: "Modes",
       href: "/dashboard",
     },
 

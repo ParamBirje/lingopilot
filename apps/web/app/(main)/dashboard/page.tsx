@@ -21,23 +21,6 @@ export default async function Page() {
         <Card
           isPressable
           as={Link}
-          href={siteConfig.links.modes.pictureQuest}
-          className="w-full h-[300px] col-span-12 sm:col-span-5"
-        >
-          <CardHeader className="absolute z-10 top-1 flex-col items-start text-black">
-            <p className="text-tiny uppercase font-bold">Mode</p>
-            <h4 className="font-medium text-xl">Picture Quest</h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Card example background"
-            className="z-0 w-full h-full scale-125 -translate-y-6 object-cover scale-x-[-1]"
-            src="https://images.pexels.com/photos/2962470/pexels-photo-2962470.jpeg?auto=compress&cs=tinysrgb&w=640&h=427&dpr=1"
-          />
-        </Card>
-        <Card
-          isPressable
-          as={Link}
           href={siteConfig.links.modes.characterConvo}
           className="w-full h-[300px] col-span-12 sm:col-span-7"
         >
@@ -50,6 +33,23 @@ export default async function Page() {
             alt="Relaxing app background"
             className="z-0 w-full h-full object-cover"
             src="https://images.pexels.com/photos/1049317/pexels-photo-1049317.jpeg?auto=compress&cs=tinysrgb&w=640&h=427&dpr=1"
+          />
+        </Card>
+        <Card
+          isPressable
+          as={Link}
+          href={siteConfig.links.modes.pictureQuest}
+          className="w-full h-[300px] col-span-12 sm:col-span-5"
+        >
+          <CardHeader className="absolute z-10 top-1 flex-col items-start text-black">
+            <p className="text-tiny uppercase font-bold">Mode</p>
+            <h4 className="font-medium text-xl">Picture Quest</h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card example background"
+            className="z-0 w-full h-full scale-125 -translate-y-6 object-cover scale-x-[-1]"
+            src="https://images.pexels.com/photos/2962470/pexels-photo-2962470.jpeg?auto=compress&cs=tinysrgb&w=640&h=427&dpr=1"
           />
         </Card>
         <Card className="col-span-12 sm:col-span-4 h-[300px]">
