@@ -13,8 +13,10 @@ import { CircularProgress } from "@nextui-org/progress";
 import Spinner from "@/components/spinner";
 import PlayModal from "./play-modal";
 import { Button } from "@nextui-org/button";
+import { useUser } from "@stackframe/stack";
 
-export default function QuestResults({ accessToken }: { accessToken: string }) {
+export default function QuestResults() {
+  const user = useUser({ or: "redirect" });
   const [session, setSession] = useAtom(pictureQuestAtom);
   const currentQuest = session!;
 
@@ -24,7 +26,10 @@ export default function QuestResults({ accessToken }: { accessToken: string }) {
     isError,
   } = useQuery({
     queryKey: ["questions", currentQuest.id],
-    queryFn: async () => await getQuestions(accessToken, currentQuest.id),
+    queryFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await getQuestions(accessToken!, currentQuest.id);
+    },
   });
 
   if (isError) return <p>Something went wrong. Try again?</p>;

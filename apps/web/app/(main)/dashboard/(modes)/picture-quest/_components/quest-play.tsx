@@ -21,8 +21,10 @@ import {
 } from "@/services/api/modes/picture-quest";
 import { endSession } from "@/services/api/modes/session";
 import Spinner from "@/components/spinner";
+import { useUser } from "@stackframe/stack";
 
-export default function QuestPlay({ accessToken }: { accessToken: string }) {
+export default function QuestPlay() {
+  const user = useUser({ or: "redirect" });
   const [session, setSession] = useAtom(pictureQuestAtom);
   const currentQuest = session!;
 
@@ -37,7 +39,10 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
     isError,
   } = useQuery({
     queryKey: ["questions", currentQuest.id],
-    queryFn: async () => await getQuestions(accessToken, currentQuest.id),
+    queryFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await getQuestions(accessToken!, currentQuest.id);
+    },
     enabled: !currentQuest.questions || currentQuest.questions.length <= 1,
   });
 
@@ -53,8 +58,10 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   }, [questionsData]);
 
   const updateAnswerMutation = useMutation({
-    mutationFn: async (params: PictureQuestAnswerUpdate) =>
-      await updateAnswer(accessToken, params),
+    mutationFn: async (params: PictureQuestAnswerUpdate) => {
+      const { accessToken } = await user.getAuthJson();
+      return await updateAnswer(accessToken!, params);
+    },
     onSuccess: (data: PictureQuestQuestion) => {
       setSession({
         ...currentQuest,
@@ -66,7 +73,10 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   });
 
   const endSessionMutation = useMutation({
-    mutationFn: async () => await endSession(accessToken, currentQuest.id),
+    mutationFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await endSession(accessToken!, currentQuest.id);
+    },
     onSuccess: (data: PictureQuestSession) => {
       setSession((prev) => ({ ...prev, ...data }));
     },
@@ -86,7 +96,10 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
   // });
 
   const verifyAnswersMutation = useMutation({
-    mutationFn: async () => await verifyAnswers(accessToken, currentQuest.id),
+    mutationFn: async () => {
+      const { accessToken } = await user.getAuthJson();
+      return await verifyAnswers(accessToken!, currentQuest.id);
+    },
   });
 
   async function handleSubmission(e: React.FormEvent<HTMLFormElement>) {
@@ -155,7 +168,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
           autoFocus
           label="Answer"
           size="lg"
-          placeholder="Enter your response here"
+          placeholder="Let your thoughts flow here..."
           className="w-full"
           value={answer}
           onValueChange={setAnswer}
@@ -167,7 +180,7 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
               ? "Something went wrong when submitting your answer. Try again."
               : undefined
           }
-          description="Avoid one word answers. Be descriptive."
+          description="Avoid one word answers. Be descriptive!"
         />
 
         <div className="flex justify-between items-center gap-4">
@@ -192,7 +205,9 @@ export default function QuestPlay({ accessToken }: { accessToken: string }) {
             {currentQuest.questions &&
             currentQuest.questions.length === currentQuestionIndex + 1
               ? "Finish"
-              : "Next"}
+              : updateAnswerMutation.isPending
+                ? "Saving"
+                : "Next"}
           </Button>
         </div>
       </form>
