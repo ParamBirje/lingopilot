@@ -17,7 +17,7 @@ app = FastAPI(
 
 # CORS
 prod_origins = [
-    "https://*.parameater.co",
+    "https://lingopilot.parameater.co",
 ]
 dev_origins = [
     "*",
