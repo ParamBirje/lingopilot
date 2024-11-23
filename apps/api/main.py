@@ -7,6 +7,7 @@ from .routes.characters import router as characters_router
 from .routes.modes import router as modes_router
 from .routes.picture_quest import router as picture_quest_router
 from .routes.user import router as user_router
+from .util.env_config import ENVIRONMENT
 
 app = FastAPI(
     root_path="/api",
@@ -15,7 +16,13 @@ app = FastAPI(
 )
 
 # CORS
-origins = ["*"]
+prod_origins = [
+    "https://*.parameater.co",
+]
+dev_origins = [
+    "*",
+]
+origins = prod_origins if ENVIRONMENT == "PROD" else dev_origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

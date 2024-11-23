@@ -19,3 +19,4 @@ SAMBANOVA_API_KEY = str(os.environ.get("SAMBANOVA_API_KEY"))
 
 AWS_ACCESS_KEY_ID = str(os.environ.get("AWS_ACCESS_KEY_ID"))
 AWS_SECRET_ACCESS_KEY = str(os.environ.get("AWS_SECRET_ACCESS_KEY"))
+ENVIRONMENT = str(os.environ.get("ENVIRONMENT"))
