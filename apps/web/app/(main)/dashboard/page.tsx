@@ -1,13 +1,13 @@
-"use server";
+"use client";
 import { Card, CardHeader } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
 import { title } from "@/components/primitives";
 import { Link } from "@nextui-org/link";
 import { siteConfig } from "@/config/site";
-import { ServerCheckOnboarded } from "@/services/user/server-auth";
+import { useOnboarded } from "@/services/user/client-auth";
 
-export default async function Page() {
-  await ServerCheckOnboarded();
+export default function Page() {
+  useOnboarded();
 
   return (
     <div className="w-full px-4 flex flex-col gap-8">
