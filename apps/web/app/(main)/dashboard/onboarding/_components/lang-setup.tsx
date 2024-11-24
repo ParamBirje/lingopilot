@@ -37,6 +37,7 @@ export default function LanguageSetup({
         </p>
 
         <Select
+          disallowEmptySelection
           disabledKeys={toLang
             .filter((lang) => lang.isDisabled)
             .map((lang) => lang.key)}
@@ -64,6 +65,7 @@ export default function LanguageSetup({
         </p>
 
         <Select
+          disallowEmptySelection
           disabledKeys={toLang
             .filter((lang) => lang.isDisabled)
             .map((lang) => lang.key)}

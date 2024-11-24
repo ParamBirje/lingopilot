@@ -38,7 +38,7 @@ export default async function Page() {
           className="w-full h-[300px] col-span-12 sm:col-span-5"
         >
           <CardHeader className="absolute z-10 top-1 flex-col items-start text-black">
-            <p className="text-tiny uppercase font-bold">Writing Mode</p>
+            <p className="text-tiny uppercase font-bold">Writing Mini-Game</p>
             <h4 className="font-medium text-xl">Picture Quest</h4>
           </CardHeader>
           <Image

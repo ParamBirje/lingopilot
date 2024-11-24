@@ -19,6 +19,7 @@ import { PlayIcon } from "lucide-react";
 import { useSetAtom } from "jotai";
 import { pictureQuestAtom } from "@/components/atoms";
 import { useUser } from "@stackframe/stack";
+import { toast } from "sonner";
 
 const sampleTopics = [
   "Nature",
@@ -54,10 +55,13 @@ export default function PlayModal({
       setTopic("");
       onClose();
     },
+    onError: () => {
+      toast.error("Something went wrong. Try with a different topic?");
+    },
   });
 
   function handleSessionCreate() {
-    if (!topic) return;
+    if (!topic) return toast.error("Please enter a topic to start the quest.");
 
     let cleanedTopic = topic.replace(/[^\w\s]/gi, "");
     createSession.mutate({ topic: cleanedTopic, language: userToLang });

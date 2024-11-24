@@ -10,6 +10,7 @@ import { useSetAtom } from "jotai";
 import PlayModal from "./play-modal";
 import Spinner from "@/components/spinner";
 import { useUser } from "@stackframe/stack";
+import { FrownIcon } from "lucide-react";
 
 export default async function PictureQuestsDashboard() {
   const user = useUser({ or: "redirect" });
@@ -68,6 +69,13 @@ export default async function PictureQuestsDashboard() {
             </CardFooter>
           </Card>
         ))}
+
+        {previousQuests?.length === 0 && (
+          <p className="col-span-full text-default-500">
+            <FrownIcon size={24} className="inline" />
+            <span className="ml-2">Its lonely here... Start a quest now!</span>
+          </p>
+        )}
       </div>
     </div>
   );

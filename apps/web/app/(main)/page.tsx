@@ -14,12 +14,14 @@ export default function Home() {
     <section className="flex flex-col items-center justify-center gap-6 py-8 md:py-10 mt-16">
       <div className="inline-block max-w-xl text-center justify-center">
         <span className={title()}>The&nbsp;</span>
-        <span className={title({ color: "violet" })}>copilot&nbsp;</span>
-        <br />
-        <span className={title()}>to supercharge your language learning.</span>
+        <span className={title({ color: "violet" })}>
+          conversation partner&nbsp;
+        </span>
+        <br className="hidden md:block" />
+        <span className={title()}>you&apos;ve been waiting for.</span>
         <div className={subtitle({ class: "mt-6" })}>
-          An interactive voice-enabled A.I assistant that hones your language
-          through speaking and comprehensive input.
+          A voice-enabled A.I conversation partner that hones your language
+          through speaking and comprehensible input through mini-games.
         </div>
       </div>
 
@@ -47,7 +49,7 @@ export default function Home() {
         </div>
 
         <p className="text-center text-default-500 text-sm">
-          🇬🇧 English available now!
+          🇬🇧 English available now! 🇩🇪 German coming soon!
         </p>
       </div>
 

@@ -43,7 +43,7 @@ export default async function RollCharacter() {
     <div className="w-full flex flex-col items-center gap-10">
       <div className="flex flex-col items-center gap-3">
         {createSession.isIdle && (
-          <p className="text-default-500">
+          <p className="text-sm text-default-500">
             Get started by pressing the button below!
           </p>
         )}

@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import { useUser } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import { siteConfig } from "@/config/site";
+import { toast } from "sonner";
 
 export default function DifficultySetup({
   difficulty,
@@ -24,10 +25,12 @@ export default function DifficultySetup({
   const router = useRouter();
 
   async function handleSave() {
-    // TODO: show toast
-    if (!onboarding?.fromLang) return;
-    if (!onboarding?.toLang) return;
-    if (!onboarding?.difficulty) return;
+    if (!onboarding?.fromLang)
+      return toast.error("Please select a language you already know.");
+    if (!onboarding?.toLang)
+      return toast.error("Please select a language you want to learn.");
+    if (!onboarding?.difficulty)
+      return toast.error("Please select a difficulty level.");
 
     setLoading(true);
     await user.update({
@@ -36,6 +39,7 @@ export default function DifficultySetup({
         onboarded: true,
       },
     });
+    toast.success("Onboarding completed!");
     router.push(siteConfig.links.dashboard);
     setLoading(false);
   }
@@ -54,6 +58,7 @@ export default function DifficultySetup({
       <Divider />
       <CardBody className="py-5 px-3 flex flex-col gap-4">
         <Select
+          disallowEmptySelection
           aria-label="difficulty"
           placeholder="Select here"
           selectionMode="single"

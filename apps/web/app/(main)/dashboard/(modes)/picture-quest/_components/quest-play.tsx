@@ -22,6 +22,7 @@ import {
 import { endSession } from "@/services/api/modes/session";
 import Spinner from "@/components/spinner";
 import { useUser } from "@stackframe/stack";
+import { toast } from "sonner";
 
 export default function QuestPlay() {
   const user = useUser({ or: "redirect" });
@@ -57,6 +58,16 @@ export default function QuestPlay() {
     }
   }, [questionsData]);
 
+  useEffect(() => {
+    let areAllVerified = currentQuest.questions?.every(
+      (question) => question.answer,
+    );
+
+    if (areAllVerified) {
+      endSessionMutation.mutate();
+    }
+  }, [currentQuestion]);
+
   const updateAnswerMutation = useMutation({
     mutationFn: async (params: PictureQuestAnswerUpdate) => {
       const { accessToken } = await user.getAuthJson();
@@ -69,6 +80,11 @@ export default function QuestPlay() {
           question.id === data.id ? data : question,
         ),
       });
+    },
+    onError: () => {
+      toast.error(
+        "Something went wrong when submitting your answer. Try again.",
+      );
     },
   });
 
@@ -104,13 +120,19 @@ export default function QuestPlay() {
 
   async function handleSubmission(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!answer) return;
+    if (!answer) return toast.error("Please enter an answer.");
 
     let cleanedAnswer = answer.replace(/[<>"']/g, "");
-    await updateAnswerMutation.mutateAsync({
-      question_id: currentQuestion?.id!,
-      answer: cleanedAnswer,
-    });
+    toast.promise(
+      updateAnswerMutation.mutateAsync({
+        question_id: currentQuestion?.id!,
+        answer: cleanedAnswer,
+      }),
+      {
+        loading: "Saving...",
+        success: "Answer saved!",
+      },
+    );
 
     verifyAnswersMutation.mutate();
 
@@ -160,6 +182,9 @@ export default function QuestPlay() {
       />
 
       <h3 className={subtitle({ class: "text-left" })}>
+        {currentQuestion?.answer && (
+          <span className="text-secondary block text-xs">Revision</span>
+        )}
         {currentQuestion?.title}
       </h3>
 
@@ -205,9 +230,7 @@ export default function QuestPlay() {
             {currentQuest.questions &&
             currentQuest.questions.length === currentQuestionIndex + 1
               ? "Finish"
-              : updateAnswerMutation.isPending
-                ? "Saving"
-                : "Next"}
+              : "Next"}
           </Button>
         </div>
       </form>
