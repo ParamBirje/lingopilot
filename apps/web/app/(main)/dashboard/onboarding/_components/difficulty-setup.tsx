@@ -33,15 +33,18 @@ export default function DifficultySetup({
       return toast.error("Please select a difficulty level.");
 
     setLoading(true);
-    await user.update({
-      clientMetadata: {
-        onboardingData: onboarding,
-        onboarded: true,
-      },
-    });
-    toast.success("Onboarding completed!");
-    router.push(siteConfig.links.dashboard);
-    setLoading(false);
+    user
+      .update({
+        clientMetadata: {
+          onboardingData: onboarding,
+          onboarded: true,
+        },
+      })
+      .then(() => {
+        toast.success("Onboarding completed!");
+        router.push(siteConfig.links.dashboard);
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
