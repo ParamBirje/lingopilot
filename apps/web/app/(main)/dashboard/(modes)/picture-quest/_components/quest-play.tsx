@@ -80,6 +80,7 @@ export default function QuestPlay() {
           question.id === data.id ? data : question,
         ),
       });
+      goToNextQuestion();
     },
     onError: () => {
       toast.error(
@@ -123,7 +124,7 @@ export default function QuestPlay() {
     if (!answer) return toast.error("Please enter an answer.");
 
     let cleanedAnswer = answer.replace(/[<>"']/g, "");
-    toast.promise(
+    await toast.promise(
       updateAnswerMutation.mutateAsync({
         question_id: currentQuestion?.id!,
         answer: cleanedAnswer,
@@ -136,8 +137,8 @@ export default function QuestPlay() {
 
     verifyAnswersMutation.mutate();
 
-    let didGo = goToNextQuestion();
-    if (didGo) return;
+    // let didGo = goToNextQuestion();
+    // if (didGo) return;
 
     // DISCONTINUED: for now
     // createQuestionsMutation.mutate({
