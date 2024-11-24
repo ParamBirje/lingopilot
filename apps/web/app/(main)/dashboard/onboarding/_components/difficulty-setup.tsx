@@ -72,9 +72,9 @@ export default function DifficultySetup({
           ))}
         </Select>
 
-        <p className="text-default-500 text-sm">
-          You can change the difficulty level at any time in the settings.
-        </p>
+        {/* <p className="text-default-500 text-sm"> */}
+        {/*   You can change the difficulty level at any time in the settings. */}
+        {/* </p> */}
       </CardBody>
       <Divider />
       <CardFooter className="flex justify-end">

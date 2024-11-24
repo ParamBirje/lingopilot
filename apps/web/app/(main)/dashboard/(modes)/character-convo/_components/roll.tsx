@@ -41,16 +41,24 @@ export default async function RollCharacter() {
 
   return (
     <div className="w-full flex flex-col items-center gap-10">
-      <Button
-        className="w-fit"
-        color="primary"
-        onClick={handleRoll}
-        isLoading={createSession.isPending}
-        endContent={<DicesIcon />}
-        size="lg"
-      >
-        {createSession.isSuccess && "Re-"}Roll
-      </Button>
+      <div className="flex flex-col items-center gap-3">
+        {createSession.isIdle && (
+          <p className="text-default-500">
+            Get started by pressing the button below!
+          </p>
+        )}
+
+        <Button
+          className="w-fit"
+          color="primary"
+          onClick={handleRoll}
+          isLoading={createSession.isPending}
+          endContent={<DicesIcon />}
+          size="lg"
+        >
+          {createSession.isSuccess && "Re-"}Roll
+        </Button>
+      </div>
 
       {createSession.isError && <p>Something went wrong. Try again?</p>}
 

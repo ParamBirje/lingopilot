@@ -24,15 +24,15 @@ export default async function Page() {
           href={siteConfig.links.modes.characterConvo}
           className="w-full h-[300px] col-span-12 sm:col-span-7"
         >
-          <CardHeader className="text-black absolute z-10 top-1 flex-col items-start">
-            <p className="text-tiny uppercase font-bold">(Beta) Mode</p>
+          <CardHeader className="absolute z-10 top-1 flex-col items-start">
+            <p className="text-tiny uppercase font-bold">Voice Mode</p>
             <h4 className="font-medium text-xl">Character Convo</h4>
           </CardHeader>
           <Image
             removeWrapper
             alt="Relaxing app background"
             className="z-0 w-full h-full object-cover"
-            src="https://images.pexels.com/photos/1049317/pexels-photo-1049317.jpeg?auto=compress&cs=tinysrgb&w=640&h=427&dpr=1"
+            src="https://images.pexels.com/photos/13627231/pexels-photo-13627231.jpeg?auto=compress&fm=jpg&w=640&h=427"
           />
         </Card>
         <Card
@@ -42,7 +42,7 @@ export default async function Page() {
           className="w-full h-[300px] col-span-12 sm:col-span-5"
         >
           <CardHeader className="absolute z-10 top-1 flex-col items-start text-black">
-            <p className="text-tiny uppercase font-bold">Mode</p>
+            <p className="text-tiny uppercase font-bold">Writing Mode</p>
             <h4 className="font-medium text-xl">Picture Quest</h4>
           </CardHeader>
           <Image

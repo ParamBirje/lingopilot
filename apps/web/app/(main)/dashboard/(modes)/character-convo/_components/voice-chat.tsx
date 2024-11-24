@@ -204,6 +204,11 @@ export default function VoiceChat() {
           alt="placeholder"
         />
 
+        <div className={subtitle({ class: "text-center" })}>
+          <p className="font-extrabold text-2xl">{session?.character?.name}</p>
+          <p>{session?.character?.description}</p>
+        </div>
+
         {!browserSupportsSpeechRecognition && (
           <p className="text-2xl text-center text-danger">
             Browser doesn&apos;t support speech recognition. Please use an
@@ -249,7 +254,7 @@ export default function VoiceChat() {
           </p>
         )}
 
-        <div className="min-h-[200px] place-content-center">
+        <div className="min-h-[100px] lg:min-h-[200px] place-content-center">
           {loading && (
             <div className="z-10 flex justify-center items-center gap-3">
               <div className="w-3 h-3 bg-warning-500 rounded-full animate-pulse" />
