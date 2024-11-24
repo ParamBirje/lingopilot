@@ -4,14 +4,10 @@ import { Image } from "@nextui-org/image";
 import { title } from "@/components/primitives";
 import { Link } from "@nextui-org/link";
 import { siteConfig } from "@/config/site";
-import { stackServerApp } from "@/stack";
-import { redirect } from "next/navigation";
+import { ServerCheckOnboarded } from "@/services/user/server-auth";
 
 export default async function Page() {
-  const user = await stackServerApp.getUser({ or: "redirect" });
-  if (!user.clientMetadata?.onboarded) {
-    redirect(siteConfig.links.onboarding);
-  }
+  await ServerCheckOnboarded();
 
   return (
     <div className="w-full px-4 flex flex-col gap-8">

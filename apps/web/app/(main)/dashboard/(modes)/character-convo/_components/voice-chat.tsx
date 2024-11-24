@@ -19,7 +19,9 @@ import { WordFadeIn } from "@/components/ui/word-fade-in";
 export default function VoiceChat() {
   const [session, setSession] = useAtom(sessionAtom);
   const user = useUser({ or: "redirect" });
-  const userToLang = user.clientMetadata?.toLang || "en-US";
+  // const userToLang =
+  //   user.clientMetadata?.onboardingData?.toLang?.key || "default en-US";
+  const userToLang = "en-US"; // TODO: use lang from the character
 
   const visualizerRef = useRef(null);
   const intervalRef = useRef<any>(null);
@@ -196,7 +198,7 @@ export default function VoiceChat() {
 
       <div className="my-auto h-full w-full flex flex-col justify-center items-center gap-10">
         <Image
-          className="z-10 rounded-full bg-white mx-auto w-1/2 md:w-1/3 aspect-square object-cover"
+          className="z-10 rounded-full bg-white mx-auto w-1/2 md:w-1/4 aspect-square object-cover"
           src={
             session?.character?.image ||
             "https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg"

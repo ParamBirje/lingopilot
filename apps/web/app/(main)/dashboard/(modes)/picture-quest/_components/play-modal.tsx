@@ -37,6 +37,9 @@ export default function PlayModal({
   label?: string;
 }) {
   const user = useUser({ or: "redirect" });
+  const userToLang =
+    user.clientMetadata?.onboardingData?.toLang?.key || "default en-US";
+
   const setSession = useSetAtom(pictureQuestAtom);
   const [topic, setTopic] = React.useState<string>("");
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -57,7 +60,7 @@ export default function PlayModal({
     if (!topic) return;
 
     let cleanedTopic = topic.replace(/[^\w\s]/gi, "");
-    createSession.mutate({ topic: cleanedTopic });
+    createSession.mutate({ topic: cleanedTopic, language: userToLang });
   }
 
   return (

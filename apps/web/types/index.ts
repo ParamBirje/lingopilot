@@ -64,6 +64,7 @@ export type CharacterConvoSession = CharacterConvoSessionCreate & {
 
 export type PictureQuestSessionCreate = {
   topic: string;
+  language: string;
 };
 
 export type PictureQuestSession = {
