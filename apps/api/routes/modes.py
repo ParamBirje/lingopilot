@@ -117,6 +117,7 @@ async def character_convo(request: Request, body: CharacterConvoCreateBody):
 
 class PictureQuestCreateBody(BaseModel):
     topic: str
+    language: str
 
 
 @router.post("/picture-quest")

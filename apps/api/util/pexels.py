@@ -21,7 +21,7 @@ def get_pexels_image(query: str, per_page: int = 10) -> str | None:
     headers = {
         "Authorization": PEXELS_API_KEY,
     }
-    url = f"https://api.pexels.com/v1/search?query={query}&per_page={per_page}"
+    url = f"https://api.pexels.com/v1/search?query={query}&per_page={per_page}&size=large"
     response = requests.get(url, headers=headers, timeout=20)
 
     if response.status_code != 200:
@@ -37,7 +37,7 @@ def get_pexels_image(query: str, per_page: int = 10) -> str | None:
     total_results = len(data["photos"])
     random_index = random.randint(0, total_results - 1)
 
-    return data["photos"][random_index]["src"]["original"]
+    return data["photos"][random_index]["src"]["large"]
 
 
 def get_pexels_images(query: str, num_images: int = 5) -> list[str]:

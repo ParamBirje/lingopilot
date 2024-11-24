@@ -57,12 +57,14 @@ async def get_voice_agent(body: VoiceBodyParams):
                 "role": "system",
                 "content": f"""
                     You will now roleplay as a {body.relation} of mine named {body.character} that I met right now {body.description}.
-                    Strictly in this language: {body.language}
                     Some roleplay context: {body.meta}
 
                     You will strictly keep the conversation going by strictly ending with a question back to me.
                     Also you are secretly helping me speak properly, so only if I make huge mistakes do correct me in a concise manner then continue the conversation.
                     Don't be too strict, if it sounds somewhat natural then it's good enough.
+
+                    Converse strictly in this language: {body.language}
+                    using easy words and sentences.
                 """,
             },
             *response.data,
