@@ -27,6 +27,7 @@ export default function VoiceChat() {
   const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [autoMic, setAutoMic] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disableMic, setDisableMic] = useState(false);
 
   const {
     transcript,
@@ -50,8 +51,10 @@ export default function VoiceChat() {
   }, [interimTranscript]);
 
   function handleStartRecording() {
-    resetTranscript();
+    if (!isMicrophoneAvailable) return;
+    if (disableMic) return;
 
+    resetTranscript();
     console.log("Listening...");
     SpeechRecognition.startListening({
       language: "en-US",
@@ -147,6 +150,7 @@ export default function VoiceChat() {
     });
 
     try {
+      setDisableMic(true);
       await audio.play();
       let message = await getLatestAssistantMessage(
         accessToken!,
@@ -155,6 +159,7 @@ export default function VoiceChat() {
       setAssistantMessage(message.content);
 
       audio.onended = () => {
+        setDisableMic(false);
         if (autoMic) {
           handleStartRecording();
         }
@@ -199,12 +204,26 @@ export default function VoiceChat() {
           alt="placeholder"
         />
 
+        {!browserSupportsSpeechRecognition && (
+          <p className="text-2xl text-center text-danger">
+            Browser doesn&apos;t support speech recognition. Please use an
+            updated Chrome browser for the best experience.
+          </p>
+        )}
+
+        {!isMicrophoneAvailable && (
+          <p className="text-2xl text-center text-danger">
+            Mic not found. Please connect a microphone.
+          </p>
+        )}
+
         {browserSupportsSpeechRecognition && isMicrophoneAvailable ? (
           <div className="z-10 flex flex-col justify-center items-center gap-5">
             <Button
               size="lg"
               isIconOnly
-              color={listening ? "primary" : "danger"}
+              color={listening ? "primary" : disableMic ? "default" : "danger"}
+              disabled={disableMic}
               onClick={
                 listening
                   ? () => {
