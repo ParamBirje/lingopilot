@@ -53,3 +53,19 @@ export async function getSupabaseWithUserSessionAndHeaders({
 
   return { user, headers, supabase, serverSession: session };
 }
+
+export async function getSupabaseSessionAndHeaders({
+  request,
+}: {
+  request: Request;
+}) {
+  const { supabase, headers } = getSupabaseWithHeaders({
+    request,
+  });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  return { headers, supabase, serverSession: session };
+}

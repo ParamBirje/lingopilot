@@ -31,3 +31,14 @@ export type UserOnboarding = {
   toLang?: Language;
   difficulty?: Difficulty;
 };
+
+export type Character = {
+  id: number;
+  name: string;
+  description: string; // location
+  meta: string; // character personality
+  relation: string;
+  image?: string;
+  voice_name: string;
+  voice_engine: string;
+};
