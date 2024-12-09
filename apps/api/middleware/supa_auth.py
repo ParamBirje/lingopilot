@@ -27,7 +27,7 @@ async def authenticate_supa_user(request: Request):
                 detail="User is not authenticated",
             )
 
-        return response.user
+        return response.user.id
 
     except Exception as e:
         print("User is not authenticated", e)

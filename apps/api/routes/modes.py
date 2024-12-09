@@ -11,6 +11,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.requests import Request
 
+from ..middleware.supa_auth import authenticate_supa_user
+
 from ..helpers.picture_quest_session import retrieve_image_questions
 from ..middleware.auth import authenticate_user, get_user_id
 from ..util.ai import (
@@ -79,12 +81,12 @@ class CharacterConvoCreateBody(BaseModel):
 
 
 @router.post("/character-convo")
-async def character_convo(request: Request, body: CharacterConvoCreateBody):
+async def character_convo(request: Request, body: CharacterConvoCreateBody, user_id: str = Depends(authenticate_supa_user)):
     """
     Creates a new session for character convo
     also picks a random character
     """
-    user_id = get_user_id(request)  # also raises if not authenticated
+    # user_id = get_user_id(request)  # also raises if not authenticated
     response = supabase.table("characters").select("*").execute()
     characters = response.data
 
