@@ -11,6 +11,10 @@ export type SupabaseUserOutletContext = SupabaseOutletContext & {
 
 // API types
 
+export type AccessToken = {
+  accessToken: string;
+};
+
 export type Language = {
   id: number;
   type?: string;
@@ -41,4 +45,22 @@ export type Character = {
   image?: string;
   voice_name: string;
   voice_engine: string;
+};
+
+export type ConversationMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+// Mode: Character Convo
+
+export type CharacterConvoSessionCreate = {
+  language: string;
+  difficulty: string;
+} & AccessToken;
+
+export type CharacterConvoSession = CharacterConvoSessionCreate & {
+  session_id: number;
+  character: Character;
+  image: string | null;
 };
