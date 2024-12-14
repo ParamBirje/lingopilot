@@ -6,6 +6,7 @@ export const siteConfig = {
 
     modes: {
       characterConvo: "/dashboard/character-convo",
+      characterConvoSession: (id: number) => `/dashboard/character-convo/${id}`,
     },
 
     navItems: [

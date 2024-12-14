@@ -2,11 +2,13 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
+import { Link } from "@nextui-org/link";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { DicesIcon } from "lucide-react";
 import { subtitle, title } from "~/components/primitives";
 import { Marquee } from "~/components/ui/marquee";
+import { siteConfig } from "~/lib/siteConfig";
 import {
   getSupabaseSessionAndHeaders,
   getSupabaseWithUserSessionAndHeaders,
@@ -139,7 +141,13 @@ export default function CharacterConvo() {
               />
             </CardBody>
             <CardFooter className="flex justify-end">
-              <Button onClick={handleLetsGo} className="w-full" color="primary">
+              <Button
+                as={Link}
+                href={siteConfig.links.modes.characterConvoSession(session.session_id)}
+                onClick={handleLetsGo}
+                className="w-full"
+                color="primary"
+              >
                 Let&apos;s go!
               </Button>
             </CardFooter>
