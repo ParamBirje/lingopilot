@@ -99,6 +99,8 @@ async def character_convo(request: Request, body: CharacterConvoCreateBody, user
             {
                 "user_id": user_id,
                 "mode": "CHARACTER_CONVO",
+                "image": image,
+                "character_id": random_character["id"],
             }
         )
         .execute()
