@@ -94,7 +94,7 @@ function Onboarding() {
 
           <Select
             disallowEmptySelection
-            disabledKeys={toLang
+            disabledKeys={fromLang
               .filter((lang) => lang.isDisabled)
               .map((lang) => lang.key)}
             label="Language You Speak"
