@@ -10,13 +10,13 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from ..middleware.auth import authenticate_user
+from ..middleware.supa_auth import authenticate_supa_user
 from ..util.ai import LLAMA_2_1, LLAMA_2_3, LLAMA_8, LLAMA_70, llm_client, polly_client
 from ..util.db import supabase
 
 router = APIRouter(
     prefix="/ai",
-    dependencies=[Depends(authenticate_user)],
+    dependencies=[Depends(authenticate_supa_user)],
 )
 
 
@@ -35,7 +35,7 @@ class VoiceBodyParams(BaseModel):
 
 
 @router.post("/voice")
-async def get_voice_agent(body: VoiceBodyParams):
+async def get_voice_agent_response(body: VoiceBodyParams):
     """
     Takes in transcript from the user
     and returns a streaming response from the provided character
