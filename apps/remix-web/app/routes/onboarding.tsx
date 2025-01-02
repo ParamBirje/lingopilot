@@ -3,7 +3,7 @@ import { siteConfig } from "~/lib/siteConfig";
 import { UserOnboarding } from "~/types";
 import { title } from "~/components/primitives";
 import { Button } from "@nextui-org/button";
-import { GaugeIcon, LanguagesIcon } from "lucide-react";
+import { Gauge, Translate } from "phosphor-react";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import React from "react";
@@ -79,7 +79,7 @@ function Onboarding() {
       <Card className="w-full md:w-1/2">
         <CardHeader className="flex gap-3">
           <Button disabled isIconOnly color="danger">
-            <LanguagesIcon />
+            <Translate />
           </Button>
           <div className="flex flex-col">
             <p className="text-md">Language Setup</p>
@@ -147,7 +147,7 @@ function Onboarding() {
       <Card className="w-full md:w-1/2">
         <CardHeader className="flex gap-3">
           <Button disabled isIconOnly color="warning">
-            <GaugeIcon />
+            <Gauge />
           </Button>
 
           <div className="flex flex-col">
@@ -192,7 +192,7 @@ function Onboarding() {
           <Button
             isDisabled={loading}
             isLoading={loading}
-            onClick={handleSave}
+            onPress={handleSave}
             color="primary"
             variant="solid"
             className="w-fit"

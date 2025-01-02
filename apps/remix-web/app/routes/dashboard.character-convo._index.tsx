@@ -5,7 +5,7 @@ import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
-import { DicesIcon } from "lucide-react";
+import { DiceThree } from "phosphor-react";
 import { subtitle, title } from "~/components/primitives";
 import { Marquee } from "~/components/ui/marquee";
 import { siteConfig } from "~/lib/siteConfig";
@@ -30,7 +30,9 @@ export async function action({ request }: ActionFunctionArgs) {
     language: user?.user_metadata?.onboarding?.toLang?.key,
   };
 
-  const session = await createCharacterConvoSession(params as CharacterConvoSessionCreate);
+  const session = await createCharacterConvoSession(
+    params as CharacterConvoSessionCreate
+  );
   return session;
 }
 
@@ -52,7 +54,8 @@ export default function CharacterConvo() {
 
   const fetcher = useFetcher();
   const session = fetcher.data as CharacterConvoSession;
-  const isRolling = fetcher.state === "loading" || fetcher.state === "submitting";
+  const isRolling =
+    fetcher.state === "loading" || fetcher.state === "submitting";
 
   function handleRoll() {
     const formData = new FormData();
@@ -69,47 +72,23 @@ export default function CharacterConvo() {
       <div className="w-full text-center">
         <h1 className={title()}>Character Convo</h1>
         <p className={subtitle()}>
-          Practice your conversational skills with different characters in various scenes.
+          Practice your conversational skills with different characters in
+          various scenes.
         </p>
-      </div>
-
-      <div className="relative w-full">
-        <Marquee className={`[--duration:15s] w-full`}>
-          {characters?.map((character) => (
-            <Card className="w-[230px]" key={character.id}>
-              <CardHeader className="flex items-center gap-3">
-                <Image
-                  alt="Character"
-                  className="rounded-full w-12 h-12 object-cover"
-                  src={character.image}
-                />
-                <div className="flex flex-col">
-                  <p className="text-md">{character.name}</p>
-                  <p className="text-small text-default-500">{character.relation}</p>
-                </div>
-              </CardHeader>
-              <Divider />
-              <CardBody>
-                <p>{character.description}</p>
-              </CardBody>
-            </Card>
-          ))}
-        </Marquee>
-
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background" />
       </div>
 
       {!fetcher.data && (
         <div className="flex flex-col items-center gap-3">
-          <p className="text-sm text-default-500">Get started by pressing the button below!</p>
+          <p className="text-sm text-default-500">
+            Get started by pressing the button below!
+          </p>
 
           <Button
             className="w-fit"
             color="primary"
             isLoading={isRolling}
-            onClick={handleRoll}
-            endContent={<DicesIcon />}
+            onPress={handleRoll}
+            endContent={<DiceThree />}
             size="lg"
           >
             Roll
@@ -119,12 +98,47 @@ export default function CharacterConvo() {
 
       {/* {createSession.isError && <p>Something went wrong. Try again?</p>} */}
 
+      {!fetcher.data && (
+        <div className="relative w-full">
+          <Marquee className={`[--duration:15s] w-full`}>
+            {characters?.map((character) => (
+              <Card className="w-[230px]" key={character.id}>
+                <CardHeader className="flex items-center gap-3">
+                  <Image
+                    alt="Character"
+                    className="rounded-full w-12 h-12 object-cover"
+                    src={character.image}
+                  />
+                  <div className="flex flex-col">
+                    <p className="text-md">{character.name}</p>
+                    <p className="text-small text-default-500">
+                      {character.relation}
+                    </p>
+                  </div>
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                  <p>{character.description}</p>
+                </CardBody>
+              </Card>
+            ))}
+          </Marquee>
+
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background" />
+        </div>
+      )}
+
       {session && (
         <div className="h-full w-full flex justify-center items-center">
           <Card className="max-w-xs md:max-w-sm">
             <CardHeader className="pb-0 pt-4 px-4 flex-col items-start">
-              <p className="text-tiny uppercase font-bold">{session.character.name}</p>
-              <small className="text-default-500">{session.character.description}</small>
+              <p className="text-tiny uppercase font-bold">
+                {session.character.name}
+              </p>
+              <small className="text-default-500">
+                {session.character.description}
+              </small>
             </CardHeader>
             <CardBody className="overflow-visible py-2 pb-0 flex flex-col gap-3">
               <p className="text-default-500 text-sm normal-case">
@@ -137,14 +151,19 @@ export default function CharacterConvo() {
               <Image
                 alt="Card background"
                 className="object-cover rounded-xl w-full aspect-video"
-                src={session.image || "https://nextui.org/images/hero-card-complete.jpeg"}
+                src={
+                  session.image ||
+                  "https://nextui.org/images/hero-card-complete.jpeg"
+                }
               />
             </CardBody>
             <CardFooter className="flex justify-end">
               <Button
                 as={Link}
-                href={siteConfig.links.modes.characterConvoSession(session.session_id)}
-                onClick={handleLetsGo}
+                href={siteConfig.links.modes.characterConvoSession(
+                  session.session_id
+                )}
+                onPress={handleLetsGo}
                 className="w-full"
                 color="primary"
               >

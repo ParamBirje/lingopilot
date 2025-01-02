@@ -160,7 +160,7 @@ export function DashboardNavbar() {
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
             <DropdownItem
-              onClick={handleSignOut}
+              onPress={handleSignOut}
               key="logout"
               color="danger"
               className="text-danger"

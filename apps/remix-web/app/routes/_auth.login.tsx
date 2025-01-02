@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { useOutletContext } from "@remix-run/react";
-import { LogInIcon } from "lucide-react";
+import { GoogleLogo } from "phosphor-react";
 import Logo from "~/components/logo";
 import { SupabaseOutletContext } from "~/types";
 
@@ -30,8 +30,8 @@ function Login() {
         <p className="pb-2 text-xl font-medium">Log In</p>
         <div className="flex flex-col gap-2">
           <Button
-            onClick={handleSignIn}
-            startContent={<LogInIcon size={16} />}
+            onPress={handleSignIn}
+            startContent={<GoogleLogo size={16} />}
             variant="shadow"
             color="primary"
           >
