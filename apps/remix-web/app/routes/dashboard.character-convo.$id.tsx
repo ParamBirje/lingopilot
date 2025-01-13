@@ -1,11 +1,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getSupabaseSessionAndHeaders } from "~/lib/supabase.server";
-import {
-  getCharacterConvoSession,
-  // getLatestAssistantMessage,
-  // getVoiceResponse,
-} from "~/services/api/modes/character-convo";
+import { getCharacterConvoSession } from "~/services/api/modes/character-convo";
 import { Image } from "@nextui-org/image";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
@@ -22,8 +18,13 @@ import "regenerator-runtime/runtime";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "@nextui-org/alert";
+import domain from "~/services/api/domain";
+import {
+  getLatestAssistantMessage,
+  getVoiceResponse,
+} from "~/services/api/modes/character-convo.client";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { serverSession } = await getSupabaseSessionAndHeaders({
@@ -32,17 +33,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const sessionId = Number(params.id);
   const accessToken = serverSession?.access_token as string;
+  const domainUrl = domain;
 
   const session = await getCharacterConvoSession(accessToken, sessionId);
   if (!session) {
     return new Response("Invalid session", { status: 404 });
   }
 
-  return { session, accessToken };
+  return { session, accessToken, domain: domainUrl };
 }
 
 export default function ConvoInterfacePage() {
-  const { session, accessToken } = useLoaderData<typeof loader>();
+  const { session, accessToken, domain } = useLoaderData<typeof loader>();
   const userToLang = "en-US";
 
   const {
@@ -50,9 +52,18 @@ export default function ConvoInterfacePage() {
     interimTranscript,
     resetTranscript,
     listening,
-    browserSupportsSpeechRecognition,
+    browserSupportsSpeechRecognition: supportForSpeechRecognition,
     isMicrophoneAvailable,
   } = useSpeechRecognition();
+
+  const [
+    browserSupportsSpeechRecognition,
+    setBrowserSupportsSpeechRecognition,
+  ] = useState(false);
+
+  useEffect(() => {
+    setBrowserSupportsSpeechRecognition(supportForSpeechRecognition);
+  }, [supportForSpeechRecognition]);
 
   const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [autoMic, setAutoMic] = useState(false);
@@ -79,103 +90,105 @@ export default function ConvoInterfacePage() {
     if (loading) return;
 
     setLoading(true);
-    // await getVoiceResponseFromAI(inputText);
+    await getVoiceResponseFromAI(inputText);
     setLoading(false);
   }
 
-  // async function getVoiceResponseFromAI(inputText: string) {
-  //   const mediaSource = new MediaSource();
+  async function getVoiceResponseFromAI(inputText: string) {
+    const mediaSource = new MediaSource();
 
-  //   const audio = new Audio();
-  //   audio.src = URL.createObjectURL(mediaSource);
+    const audio = new Audio();
+    audio.src = URL.createObjectURL(mediaSource);
 
-  //   mediaSource.addEventListener("sourceopen", async () => {
-  //     const sourceBuffer = mediaSource.addSourceBuffer("audio/mpeg");
+    mediaSource.addEventListener("sourceopen", async () => {
+      const sourceBuffer = mediaSource.addSourceBuffer("audio/mpeg");
 
-  //     sourceBuffer.addEventListener("error", (error) => {
-  //       console.error("SourceBuffer error:", error);
-  //     });
+      sourceBuffer.addEventListener("error", (error) => {
+        console.error("SourceBuffer error:", error);
+      });
 
-  //     const response = await getVoiceResponse({
-  //       text: inputText,
-  //       language: userToLang,
-  //       voice_name: session?.character.voice_name!,
-  //       voice_engine: session?.character.voice_engine!,
-  //       session_id: session?.session_id!,
-  //       character: session?.character.name!,
-  //       description: session?.character.description!,
-  //       meta: session?.character.meta!,
-  //       relation: session?.character.relation!,
-  //       accessToken: accessToken!,
-  //     });
+      const response = await getVoiceResponse({
+        text: inputText,
+        language: userToLang,
+        voice_name: session?.character.voice_name!,
+        voice_engine: session?.character.voice_engine!,
+        session_id: session?.session_id!,
+        character: session?.character.name!,
+        description: session?.character.description!,
+        meta: session?.character.meta!,
+        relation: session?.character.relation!,
+        accessToken: accessToken!,
+        domainUrl: domain,
+      });
 
-  //     if (!response) {
-  //       // TODO: show toast
-  //       console.error("Response not found");
-  //       return;
-  //     }
+      if (!response) {
+        // TODO: show toast
+        console.error("Response not found");
+        return;
+      }
 
-  //     const reader = response.body?.getReader();
-  //     if (!reader) {
-  //       console.error("Reader not available");
-  //       return;
-  //     }
+      const reader = response.body?.getReader();
+      if (!reader) {
+        console.error("Reader not available");
+        return;
+      }
 
-  //     let isAppending = false; // Track appending state
+      let isAppending = false; // Track appending state
 
-  //     function appendBuffer(value: Uint8Array) {
-  //       if (isAppending) {
-  //         return;
-  //       }
+      function appendBuffer(value: Uint8Array) {
+        if (isAppending) {
+          return;
+        }
 
-  //       isAppending = true;
-  //       sourceBuffer.appendBuffer(value);
-  //     }
+        isAppending = true;
+        sourceBuffer.appendBuffer(value);
+      }
 
-  //     sourceBuffer.addEventListener("updateend", () => {
-  //       isAppending = false;
+      sourceBuffer.addEventListener("updateend", () => {
+        isAppending = false;
 
-  //       // ignore this @typescript-eslint/no-floating-promises
-  //       void readStream();
-  //     });
+        // ignore this @typescript-eslint/no-floating-promises
+        void readStream();
+      });
 
-  //     async function readStream() {
-  //       if (!reader) return;
-  //       const { done, value } = await reader.read();
-  //       if (done) {
-  //         if (mediaSource.readyState === "open") {
-  //           mediaSource.endOfStream();
-  //         }
-  //         return;
-  //       }
+      async function readStream() {
+        if (!reader) return;
+        const { done, value } = await reader.read();
+        if (done) {
+          if (mediaSource.readyState === "open") {
+            mediaSource.endOfStream();
+          }
+          return;
+        }
 
-  //       if (value) {
-  //         appendBuffer(value);
-  //       }
-  //     }
+        if (value) {
+          appendBuffer(value);
+        }
+      }
 
-  //     void readStream();
-  //   });
+      void readStream();
+    });
 
-  //   try {
-  //     setDisableMic(true);
-  //     await audio.play();
-  //     let message = await getLatestAssistantMessage(
-  //       accessToken!,
-  //       session?.session_id!
-  //     );
-  //     setAssistantMessage(message.content);
+    try {
+      setDisableMic(true);
+      await audio.play();
+      let message = await getLatestAssistantMessage(
+        domain,
+        accessToken!,
+        session?.session_id!
+      );
+      setAssistantMessage(message.content);
 
-  //     audio.onended = () => {
-  //       setDisableMic(false);
-  //       if (autoMic) {
-  //         handleStartRecording();
-  //       }
-  //     };
-  //   } catch (error) {
-  //     console.error("Error playing audio:", error);
-  //   }
-  // }
+      audio.onended = () => {
+        setDisableMic(false);
+        if (autoMic) {
+          handleStartRecording();
+        }
+      };
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  }
 
   return (
     <div className="w-full h-full">
@@ -264,7 +277,7 @@ export default function ConvoInterfacePage() {
           <CardHeader className="flex gap-3">
             <Info size={25} />
             <div className="flex flex-col">
-              <p className="text-md">Transcript</p>
+              <p className="text-md">{session.character?.name}'s Transcript</p>
             </div>
           </CardHeader>
           <Divider />
