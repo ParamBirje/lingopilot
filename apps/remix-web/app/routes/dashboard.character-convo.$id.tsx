@@ -40,11 +40,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return new Response("Invalid session", { status: 404 });
   }
 
-  return { session, accessToken, domain: domainUrl };
+  return { session, accessToken, domain: domainUrl, sessionId };
 }
 
 export default function ConvoInterfacePage() {
-  const { session, accessToken, domain } = useLoaderData<typeof loader>();
+  const { session, accessToken, domain, sessionId } =
+    useLoaderData<typeof loader>();
   const userToLang = "en-US";
 
   const {
@@ -59,11 +60,23 @@ export default function ConvoInterfacePage() {
   const [
     browserSupportsSpeechRecognition,
     setBrowserSupportsSpeechRecognition,
-  ] = useState(false);
+  ] = useState(true);
 
   useEffect(() => {
     setBrowserSupportsSpeechRecognition(supportForSpeechRecognition);
   }, [supportForSpeechRecognition]);
+
+  useEffect(() => {
+    const delayOffset = 900;
+
+    if (!interimTranscript) {
+      setTimeout(() => {
+        if (!interimTranscript && autoMic) {
+          handleStopRecording();
+        }
+      }, delayOffset);
+    }
+  }, [interimTranscript]);
 
   const [assistantMessage, setAssistantMessage] = useState<string>("");
   const [autoMic, setAutoMic] = useState(false);
@@ -112,7 +125,7 @@ export default function ConvoInterfacePage() {
         language: userToLang,
         voice_name: session?.character.voice_name!,
         voice_engine: session?.character.voice_engine!,
-        session_id: session?.session_id!,
+        session_id: sessionId,
         character: session?.character.name!,
         description: session?.character.description!,
         meta: session?.character.meta!,
@@ -173,9 +186,9 @@ export default function ConvoInterfacePage() {
       setDisableMic(true);
       await audio.play();
       let message = await getLatestAssistantMessage(
-        domain,
         accessToken!,
-        session?.session_id!
+        sessionId,
+        domain
       );
       setAssistantMessage(message.content);
 
@@ -283,7 +296,8 @@ export default function ConvoInterfacePage() {
           <Divider />
           <CardBody>
             <p className="text-default-500">
-              Start by saying hello to {session.character?.name}!
+              {assistantMessage ||
+                `Start by saying hello to ${session.character?.name}!`}
             </p>
           </CardBody>
         </Card>

@@ -35,11 +35,11 @@ export const getVoiceResponse = async ({
         "x-supa-access-token": accessToken,
       },
       body: JSON.stringify({
+        session_id,
         text,
         language,
         voice_name,
         voice_engine,
-        session_id,
         character,
         description,
         meta,
